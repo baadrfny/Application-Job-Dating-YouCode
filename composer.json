@@ -1,0 +1,15 @@
+{
+    "name": "badroxy/applicationjobdatingyou-code",
+    "autoload": {
+        "psr-4": {
+            "Badroxy\\ApplicationjobdatingyouCode\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "salutbadr47",
+            "email": "salutbadr47@gmail.com"
+        }
+    ],
+    "require": {}
+}
