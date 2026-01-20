@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS job_dating_youcode;
+USE job_dating_youcode;
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -41,5 +44,5 @@ CREATE TABLE annonces (
     image VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (entreprise_id) REFERENCES entreprises(id) ON DELETE CASCADE
+    FOREIGN KEY (entreprise_id) REFERENCES entreprises(id)
 );
