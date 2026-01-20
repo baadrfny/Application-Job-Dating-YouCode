@@ -1,6 +1,8 @@
+-- Create database if not exists
 CREATE DATABASE IF NOT EXISTS job_dating_youcode;
 USE job_dating_youcode;
 
+-- Users table: stores all users
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -10,12 +12,16 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Admins table: each admin linked to a user
+-- ON DELETE CASCADE ensures deleting a user deletes the admin record
 CREATE TABLE admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Apprenants table: each learner linked to a user
+-- ON DELETE CASCADE ensures deleting a user deletes the apprenant record
 CREATE TABLE apprenants (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -24,6 +30,7 @@ CREATE TABLE apprenants (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Entreprises table: stores companies
 CREATE TABLE entreprises (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(150) NOT NULL,
@@ -33,6 +40,8 @@ CREATE TABLE entreprises (
     telephone VARCHAR(30)
 );
 
+-- Annonces table: job ads linked to entreprises
+-- ON DELETE CASCADE ensures deleting a company deletes its annonces automatically
 CREATE TABLE annonces (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(150) NOT NULL,
@@ -44,5 +53,5 @@ CREATE TABLE annonces (
     image VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (entreprise_id) REFERENCES entreprises(id)
+    FOREIGN KEY (entreprise_id) REFERENCES entreprises(id) ON DELETE CASCADE
 );
