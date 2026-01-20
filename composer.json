@@ -1,14 +1,14 @@
 {
-    "name": "badroxy/applicationjobdatingyou-code",
+    "name": "lenovo/application-job-dating-you-code",
     "autoload": {
         "psr-4": {
-            "Badroxy\\ApplicationjobdatingyouCode\\": "src/"
+            "Lenovo\\ApplicationJobDatingYouCode\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "salutbadr47",
-            "email": "salutbadr47@gmail.com"
+            "name": "Mohammed Darkaoui",
+            "email": "darkaouimeed12@gmail.com"
         }
     ],
     "require": {}
