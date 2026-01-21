@@ -1,4 +1,4 @@
-{% extends "front/layout.twig" %}
+{% extends "layouts/main.twig" %}
 
 {% block title %}{{ offer.titre }} - Job Details{% endblock %}
 
@@ -9,7 +9,7 @@
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h1 class="card-title">{{ offer.titre }}</h1>
+                    <h1 class="card-title">{{ annonces.titre }}</h1>
                     
                     <div class="d-flex gap-2 mb-3">
                         <span class="badge bg-primary fs-6">{{ offer.type_contrat }}</span>
@@ -32,7 +32,7 @@
                     
                     {% if offer.image %}
                     <h4 class="mt-4">🖼️ Job Image</h4>
-                    <img src="{{ offer.image }}" alt="{{ offer.titre }}" class="img-fluid rounded">
+                    <img src="{{ offer.image }}" alt="{{ annonces.titre }}" class="img-fluid rounded">
                     {% endif %}
                 </div>
                 <div class="card-footer text-muted">
