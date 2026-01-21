@@ -2,9 +2,9 @@
     "name": "lenovo/application-job-dating-you-code",
     "autoload": {
         "psr-4": {
-            "controllers\\": "app/controllers/",
+            "core\\": "app/core/",
             "models\\": "app/models/",
-            "core\\": "app/core/"
+            "controllers\\": "app/controllers/"
         }
     },
     "authors": [
@@ -13,5 +13,7 @@
             "email": "darkaouimeed12@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+
+    }
 }

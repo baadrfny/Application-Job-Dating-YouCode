@@ -1,8 +1,8 @@
 <?php
 
-
-
-$router->get('/', 'controllers\\front\\JobController@index');
+$router->get('/', function () {
+    return 'Hello Framework ✅';
+});
 
 $router->get('/db-test', function (\core\Request $request) {
     try {
@@ -27,7 +27,6 @@ $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
 $router->post('/admin/login', 'controllers\\back\\AuthController@login');
 $router->get('/admin/dashboard', 'controllers\\back\\DashboardController@index');
 $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
-
 
 
 

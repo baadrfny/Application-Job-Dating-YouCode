@@ -92,3 +92,4 @@ class Router
         return "404 Not Found";
     }
 }
+
