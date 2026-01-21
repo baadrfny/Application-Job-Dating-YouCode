@@ -1,102 +1,57 @@
-{% extends "front/layout.twig" %}
-
-{% block title %}{{ offer.titre }} - Job Details{% endblock %}
-
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <!-- تفاصيل العرض -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="card-title">{{ offer.titre }}</h1>
-                    
-                    <div class="d-flex gap-2 mb-3">
-                        <span class="badge bg-primary fs-6">{{ offer.type_contrat }}</span>
-                        <span class="text-muted">
-                            <i class="fas fa-map-marker-alt me-1"></i> {{ offer.localisation }}
-                        </span>
-                    </div>
-                    
-                    <h4 class="mt-4">📝 Job Description</h4>
-                    <div class="p-3 bg-light rounded">
-                        {{ offer.description|nl2br }}
-                    </div>
-                    
-                    {% if offer.competences %}
-                    <h4 class="mt-4">💼 Required Skills</h4>
-                    <div class="p-3 bg-light rounded">
-                        {{ offer.competences|nl2br }}
-                    </div>
-                    {% endif %}
-                    
-                    {% if offer.image %}
-                    <h4 class="mt-4">🖼️ Job Image</h4>
-                    <img src="{{ offer.image }}" alt="{{ offer.titre }}" class="img-fluid rounded">
-                    {% endif %}
+<div class="container">
+    <h1>Available Job Offers</h1>
+    
+    {# 🔧 الفلاتر #}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Filters</h5>
+            <div class="row">
+                <div class="col-md-5">
+                    <label class="form-label">Company</label>
+                    <select class="form-select" id="companyFilter">
+                        <option value="">All Companies</option>
+                        {% for company in companies %}
+                        <option value="{{ company.id }}">{{ company.nom }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="card-footer text-muted">
-                    <small>
-                        <i class="fas fa-calendar me-1"></i> 
-                        Posted on: {{ offer.created_at|date('F j, Y') }}
-                    </small>
+                <div class="col-md-5">
+                    <label class="form-label">Contract Type</label>
+                    <select class="form-select" id="contractFilter">
+                        <option value="">All Contract Types</option>
+                        <option value="CDI">CDI</option>
+                        <option value="CDD">CDD</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Stage">Stage</option>
+                    </select>
                 </div>
-            </div>
-        </div>
-        
-        <!-- معلومات الشركة -->
-        <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">🏢 Company Information</h4>
-                    
-                    {% if company %}
-                    <h5 class="mt-3">{{ company.nom }}</h5>
-                    
-                    <div class="company-info mt-3">
-                        {% if company.secteur %}
-                        <p class="mb-2">
-                            <strong><i class="fas fa-industry me-2"></i>Sector:</strong><br>
-                            {{ company.secteur }}
-                        </p>
-                        {% endif %}
-                        
-                        {% if company.localisation %}
-                        <p class="mb-2">
-                            <strong><i class="fas fa-map-pin me-2"></i>Location:</strong><br>
-                            {{ company.localisation }}
-                        </p>
-                        {% endif %}
-                        
-                        {% if company.email %}
-                        <p class="mb-2">
-                            <strong><i class="fas fa-envelope me-2"></i>Email:</strong><br>
-                            <a href="mailto:{{ company.email }}">{{ company.email }}</a>
-                        </p>
-                        {% endif %}
-                        
-                        {% if company.telephone %}
-                        <p class="mb-0">
-                            <strong><i class="fas fa-phone me-2"></i>Phone:</strong><br>
-                            <a href="tel:{{ company.telephone }}">{{ company.telephone }}</a>
-                        </p>
-                        {% endif %}
-                    </div>
-                    {% else %}
-                    <div class="alert alert-warning">
-                        Company information not available.
-                    </div>
-                    {% endif %}
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" onclick="applyFilters()">Filter</button>
                 </div>
-            </div>
-            
-            <!-- زر الرجوع -->
-            <div class="mt-4">
-                <a href="/annonces" class="btn btn-outline-primary w-100">
-                    <i class="fas fa-arrow-left me-2"></i> Back to All Offers
-                </a>
             </div>
         </div>
     </div>
+    
+    {# 🔍 البحث (لـ Task 5) #}
+    <div class="mb-4">
+        <input type="text" class="form-control" id="searchInput" 
+               placeholder="Search by job title, company, or description...">
+    </div>
+    
+    {# 📋 قائمة العروض #}
+    <div class="row" id="offersContainer">
+        {% include 'front/jobs/_offers_list.twig' with {'offers': offers} %}
+    </div>
 </div>
+
+<script>
+function applyFilters() {
+    const companyId = document.getElementById('companyFilter').value;
+    const contractType = document.getElementById('contractFilter').value;
+    
+    // ستضيف AJAX هنا لاحقاً
+    alert(`Filters applied: Company=${companyId}, Contract=${contractType}`);
+}
+</script>
 {% endblock %}
