@@ -13,5 +13,7 @@
             "email": "darkaouimeed12@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "twig/twig": "^3.22"
+    }
 }
