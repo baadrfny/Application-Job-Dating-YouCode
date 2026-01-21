@@ -1,5 +1,7 @@
 <?php
 
+
+
 $router->get('/', 'controllers\\front\\JobController@index');
 
 $router->get('/db-test', function (\core\Request $request) {
@@ -17,10 +19,15 @@ $router->get('/login', 'controllers\\front\\AuthController@showLogin');
 $router->post('/login', 'controllers\\front\\AuthController@login');
 $router->post('/logout', 'controllers\\front\\AuthController@logout');
 
+$router->get('/annonces', 'controllers\\front\\JobController@index');
+$router->get('/annonces/{id}', 'controllers\\front\\JobController@show');
+
 // Back Office Routes (Admin)
 $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
 $router->post('/admin/login', 'controllers\\back\\AuthController@login');
 $router->get('/admin/dashboard', 'controllers\\back\\DashboardController@index');
 $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
+
+
 
 
