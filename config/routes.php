@@ -1,6 +1,6 @@
 <?php
 
-
+$router = new \core\Router();
 
 $router->get('/', 'controllers\\front\\JobController@index');
 
@@ -19,8 +19,9 @@ $router->get('/login', 'controllers\\front\\AuthController@showLogin');
 $router->post('/login', 'controllers\\front\\AuthController@login');
 $router->post('/logout', 'controllers\\front\\AuthController@logout');
 
-$router->get('/annonces', 'controllers\\front\\JobController@index');
-$router->get('/annonces/{id}', 'controllers\\front\\JobController@show');
+$router->get('/', 'controllers\\front\\JobController@index');
+$router->get('/annonces/filter', 'controllers\\front\\JobController@filter');
+require 'config/routes.php';
 
 // Back Office Routes (Admin)
 $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
@@ -31,3 +32,6 @@ $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
 
 
 
+$router->get('/test-123', function() {
+    return "TEST ROUTE IS WORKING!";
+});

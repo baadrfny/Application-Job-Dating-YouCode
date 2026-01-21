@@ -1,7 +1,7 @@
 <?php
 namespace controllers\front;
 
-use models\Announcement;
+use models\AnnonceModel;
 use models\Company;
 
 class JobController {
@@ -9,12 +9,12 @@ class JobController {
     private $companyModel;
     
     public function __construct() {
-        $this->announceModel = new Announcement();
+        $this->announceModel = new AnnonceModel();
         $this->companyModel = new Company();
     }
     
     public function index($request) {
-        $offers = $this->announceModel->getActiveOffers();
+        $offers = $this->announceModel->getActiveAnnonces();
         $companies = $this->companyModel->getAll();
         
         return $this->renderTemplate('front/jobs/index', [
@@ -24,7 +24,7 @@ class JobController {
     }
     
     public function show($request, $id) {
-        $offer = $this->announceModel->findById($id);
+        $offer = $this->announceModel->find($id);
         
         if (!$offer || $offer['deleted_at'] == 1) {
             return $this->renderError(404, "Offer not found");
@@ -49,4 +49,16 @@ class JobController {
         http_response_code($code);
         return "<h1>Error $code</h1><p>$message</p>";
     }
+
+
+    public function filter($request) {
+    $company_id = $request->get('company_id');
+    $contract_type = $request->get('contract_type');
+    
+    $offers = $this->announceModel->getFilteredAnnonces($company_id, $contract_type);
+    
+    //  JSON take back AJAX
+    header('Content-Type: application/json');
+    return json_encode($offers);
+}
 }
