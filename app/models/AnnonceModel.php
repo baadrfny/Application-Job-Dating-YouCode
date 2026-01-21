@@ -46,4 +46,30 @@ class AnnonceModel extends Model {
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+
+    public function getFilteredAnnonces($company_id = null, $contract_type = null) {
+    $sql = "SELECT a.*, e.nom as entreprise_nom 
+            FROM annonces a 
+            JOIN entreprises e ON a.entreprise_id = e.id 
+            WHERE a.deleted_at = FALSE";
+    
+    $params = [];
+    
+    if ($company_id) {
+        $sql .= " AND a.entreprise_id = :company_id";
+        $params['company_id'] = $company_id;
+    }
+    
+    if ($contract_type) {
+        $sql .= " AND a.type_contrat = :contract_type";
+        $params['contract_type'] = $contract_type;
+    }
+    
+    $sql .= " ORDER BY a.created_at DESC";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
 }

@@ -1,6 +1,8 @@
 <?php
 namespace models;
 
+
+
 class Company {
     protected $table = 'entreprises';
     
@@ -24,7 +26,7 @@ class Company {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
     
-    
+
     public function getForFilters() {
         $pdo = \core\Database::getConnection();
         
