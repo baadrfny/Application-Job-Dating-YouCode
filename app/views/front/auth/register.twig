@@ -1,0 +1,44 @@
+<div class="auth-card">
+    <div class="brand">
+        <div class="brand-mark">+</div>
+        <h1>iYouCode</h1>
+        <p>Job Dating Platform</p>
+    </div>
+
+    <div class="error">{{ error }}</div>
+
+    <form method="post" action="/register">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="field">
+            <label for="name">Nom complet</label>
+            <input id="name" type="text" name="name" placeholder="Votre nom" required>
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="votre.email@iyoucode.ma" required>
+        </div>
+
+        <div class="field">
+            <label for="promotion">Promotion</label>
+            <input id="promotion" type="text" name="promotion" placeholder="2026">
+        </div>
+
+        <div class="field">
+            <label for="specialisation">Specialisation</label>
+            <input id="specialisation" type="text" name="specialisation" placeholder="Dev Web">
+        </div>
+
+        <div class="field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" name="password" placeholder="********" required>
+        </div>
+
+        <button class="btn-primary" type="submit">Creer un compte</button>
+    </form>
+
+    <div class="switch">
+        Deja un compte? <a href="/login">Se connecter</a>
+    </div>
+</div>
