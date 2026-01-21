@@ -64,4 +64,20 @@ abstract class Model
         $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id");
         return $stmt->execute(['id' => $id]);
     }
+
+
+
+
+    // pour statistiques
+    public function count(string $where = "", array $params = []): int {
+        $sql = "SELECT COUNT(*) FROM {$this->table} " . ($where ? "WHERE $where" : "");
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
+
+
+
+
+
 }
