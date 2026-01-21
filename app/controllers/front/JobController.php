@@ -1,14 +1,16 @@
 <?php
 namespace controllers\front;
 
+use core\Controller;
 use models\AnnonceModel;
 use models\Company;
 
-class JobController {
+class JobController extends Controller{
     private $announceModel;
     private $companyModel;
     
     public function __construct() {
+        parent::__construct();
         $this->announceModel = new AnnonceModel();
         $this->companyModel = new Company();
     }
@@ -17,7 +19,7 @@ class JobController {
         $offers = $this->announceModel->getActiveAnnonces();
         $companies = $this->companyModel->getAll();
         
-        return $this->renderTemplate('front/jobs/index', [
+        return $this->render('front/jobs/index', [
             'offers' => $offers,
             'companies' => $companies
         ]);
@@ -26,9 +28,10 @@ class JobController {
     public function show($request, $id) {
         $offer = $this->announceModel->find($id);
         
-        if (!$offer || $offer['deleted_at'] == 1) {
-            return $this->renderError(404, "Offer not found");
-        }
+        // if (!$offer || $offer['deleted_at'] == 1) {
+        //     http_response_code(404);
+        //     return "<h1>Error 404</h1><p>Offer not found</p>";
+        // }
         
         $company = $this->companyModel->findById($offer['entreprise_id']);
         
