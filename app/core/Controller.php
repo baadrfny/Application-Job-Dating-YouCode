@@ -25,6 +25,15 @@ abstract class Controller
 
     protected function view(string $view, array $data = [], string $layout = 'layouts.main'): string
     {
+        if (!array_key_exists('title', $data)) {
+            $data['title'] = '';
+        }
+        if (!array_key_exists('error', $data)) {
+            $data['error'] = '';
+        }
+        if (!array_key_exists('error_display', $data)) {
+            $data['error_display'] = 'none';
+        }
         $data['csrf_token'] = Security::generateCSRFToken();
         return View::render($view, $data, $layout);
     }
