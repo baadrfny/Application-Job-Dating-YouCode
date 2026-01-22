@@ -9,7 +9,7 @@ abstract class Controller
 {
     protected Environment $twig;
     public function __construct() {
-    $loader = new FilesystemLoader(__DIR__ . '/../views');
+    $loader = new FilesystemLoader(dirname(__DIR__) . '/views');
         $this->twig = new Environment($loader, [
             'cache' => false,
             'debug' => true
@@ -19,6 +19,10 @@ abstract class Controller
 
     public function render(string $view, array $data = []) {
         $view = str_ends_with($view, '.twig') ? $view : $view . '.twig';
+
+        if (!isset($data['title'])) $data['title'] = 'Job Dating';
+    if (!isset($data['error_display'])) $data['error_display'] = 'none';
+
         echo $this->twig->render($view, $data);
     }
 
