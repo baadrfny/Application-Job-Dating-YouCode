@@ -1,0 +1,64 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Dashboard</div>
+    <div class="page-subtitle">Vue d'ensemble de la plateforme Job Dating</div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-icon blue">A</div>
+            <span>Annonces actives</span>
+            <strong>{{ stats.active_annonces }}</strong>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">E</div>
+            <span>Entreprises partenaires</span>
+            <strong>{{ stats.total_entreprises }}</strong>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon purple">P</div>
+            <span>Apprenants inscrits</span>
+            <strong>{{ stats.total_apprenants }}</strong>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange">R</div>
+            <span>Annonces archivees</span>
+            <strong>{{ stats.archived_annonces }}</strong>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <h3>Annonces recentes</h3>
+                <a class="link-primary" href="/admin/annonces">Voir tout</a>
+            </div>
+
+            {% for annonce in latestAnnonces %}
+                <div class="announcement-row">
+                    <img class="announcement-img" src="{{ annonce.image|default('/public/assets/placeholder.svg') }}" alt="Annonce">
+                    <div>
+                        <strong>{{ annonce.titre }}</strong>
+                        <div class="muted">{{ annonce.entreprise_nom }}</div>
+                        <div class="pill">{{ annonce.type_contrat }}</div>
+                    </div>
+                    <div class="muted">{{ annonce.created_at|date("d/m/Y") }}</div>
+                </div>
+            {% else %}
+                <div class="muted">Aucune annonce recente.</div>
+            {% endfor %}
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h3>Actions rapides</h3>
+            </div>
+            <div class="quick-actions">
+                <a class="btn primary" href="/admin/annonces">Creer une annonce</a>
+                <a class="btn success" href="/admin/entreprises">Ajouter une entreprise</a>
+                <a class="btn ghost" href="/admin/apprenants">Voir les apprenants</a>
+                <a class="btn ghost" href="/admin/archives">Acceder aux archives</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

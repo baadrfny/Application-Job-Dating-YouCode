@@ -1,0 +1,137 @@
+{% extends "layouts/front.twig" %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Trouvez votre opportunite professionnelle</h1>
+        <p>{{ offers|length }} offre(s) disponible(s)</p>
+    </section>
+
+    <div class="search-bar">
+        <input id="searchInput" type="text" placeholder="Rechercher par titre, entreprise ou description...">
+        <button id="filterBtn" class="filter-btn" type="button">Filtres</button>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <select id="companyFilter" class="filter-btn">
+            <option value="">Toutes les entreprises</option>
+            {% for company in companies %}
+                <option value="{{ company.id }}">{{ company.nom }}</option>
+            {% endfor %}
+        </select>
+        <select id="contractFilter" class="filter-btn">
+            <option value="">Tous les contrats</option>
+            <option value="CDI">CDI</option>
+            <option value="CDD">CDD</option>
+            <option value="Stage">Stage</option>
+            <option value="Freelance">Freelance</option>
+        </select>
+    </div>
+
+    <div id="offersContainer" class="offers-grid">
+        {% for offer in offers %}
+            <article class="offer-card">
+                <img src="{{ offer.image|default('/public/assets/placeholder.svg') }}" alt="Offre">
+                <div class="offer-body">
+                    <span class="pill">{{ offer.type_contrat }}</span>
+                    <h3>{{ offer.titre }}</h3>
+                    <div class="offer-meta">
+                        <div>{{ offer.entreprise_nom }}</div>
+                        <div>{{ offer.localisation }}</div>
+                    </div>
+                    <div class="offer-footer">
+                        <a class="details-link" href="/annonces/{{ offer.id }}">Voir details</a>
+                        <span class="muted">{{ offer.created_at|date("d/m/Y") }}</span>
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <div class="muted">Aucune offre disponible.</div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const companyFilter = document.getElementById('companyFilter');
+        const contractFilter = document.getElementById('contractFilter');
+        const filterBtn = document.getElementById('filterBtn');
+        const offersContainer = document.getElementById('offersContainer');
+        let debounceTimer;
+
+        const buildCard = (offer) => {
+            const image = offer.image ? offer.image : '/public/assets/placeholder.svg';
+            return `
+                <article class="offer-card">
+                    <img src="${image}" alt="Offre">
+                    <div class="offer-body">
+                        <span class="pill">${offer.type_contrat}</span>
+                        <h3>${offer.titre}</h3>
+                        <div class="offer-meta">
+                            <div>${offer.entreprise_nom}</div>
+                            <div>${offer.localisation}</div>
+                        </div>
+                        <div class="offer-footer">
+                            <a class="details-link" href="/annonces/${offer.id}">Voir details</a>
+                            <span class="muted">${offer.created_at}</span>
+                        </div>
+                    </div>
+                </article>
+            `;
+        };
+
+        // const performSearch = async () => {
+        //     const params = new URLSearchParams();
+        //     if (searchInput.value) params.append('search', searchInput.value);
+        //     if (companyFilter.value) params.append('company_id', companyFilter.value);
+        //     if (contractFilter.value) params.append('contract_type', contractFilter.value);
+
+        //     const response = await fetch(`/annonces/filter?${params.toString()}`);
+        //     const offers = await response.json();
+
+        //     offersContainer.innerHTML = '';
+        //     if (!offers.length) {
+        //         offersContainer.innerHTML = '<div class="muted">Aucune offre ne correspond a vos criteres.</div>';
+        //         return;
+        //     }
+
+        //     offers.forEach((offer) => {
+        //         offersContainer.insertAdjacentHTML('beforeend', buildCard(offer));
+        //     });
+        // };
+        const performSearch = async () => {
+    try {
+        const params = new URLSearchParams();
+        if (searchInput.value) params.append('search', searchInput.value);
+        if (companyFilter.value) params.append('company_id', companyFilter.value);
+        if (contractFilter.value) params.append('contract_type', contractFilter.value);
+
+        const response = await fetch(`/annonces/filter?${params.toString()}`);
+        const text = await response.text(); // نقرأه كنص أولاً للتأكد
+        
+        console.log("البيانات القادمة من السيرفر:", text);
+
+        // تحويل النص إلى JSON (هنا قد يحدث الخطأ إذا كان السيرفر يرسل مصفوفتين)
+        const offers = JSON.parse(text);
+
+        offersContainer.innerHTML = '';
+        if (!offers || offers.length === 0) {
+            offersContainer.innerHTML = '<div class="muted">Aucune offre ne correspond.</div>';
+            return;
+        }
+
+        offers.forEach((offer) => {
+            offersContainer.insertAdjacentHTML('beforeend', buildCard(offer));
+        });
+    } catch (error) {
+        console.error("خطأ في معالجة البيانات:", error);
+    }
+};
+
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(performSearch, 300);
+        });
+        filterBtn.addEventListener('click', performSearch);
+        companyFilter.addEventListener('change', performSearch);
+        contractFilter.addEventListener('change', performSearch);
+    </script>
+{% endblock %}

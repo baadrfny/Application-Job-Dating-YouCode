@@ -1,0 +1,19 @@
+{
+    "name": "lenovo/application-job-dating-you-code",
+    "autoload": {
+        "psr-4": {
+            "core\\": "app/core/",
+            "models\\": "app/models/",
+            "controllers\\": "app/controllers/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammed Darkaoui",
+            "email": "darkaouimeed12@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.22"
+    }
+}
