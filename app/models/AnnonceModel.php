@@ -40,7 +40,11 @@ class AnnonceModel extends Model {
 
     //latest 3 annonces
     public function getLatest(int $limit = 3): array {
-        $sql = "SELECT * FROM {$this->table} WHERE deleted_at = FALSE ORDER BY created_at DESC LIMIT :limit";
+        $sql = "SELECT a.*, e.nom as entreprise_nom 
+                FROM annonces a
+                JOIN entreprises e ON a.entreprise_id = e.id
+                WHERE a.deleted_at = FALSE 
+                ORDER BY a.created_at DESC LIMIT :limit";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();

@@ -13,7 +13,9 @@ class AnnouncementController extends Controller {
         $annonces = $model->getActiveAnnonces();
         
         return $this->render('back/announcements/index', [
-            'annonces' => $annonces
+            'annonces' => $annonces,
+            'title' => 'Annonces',
+            'active' => 'annonces'
         ]);
     }
 
@@ -22,7 +24,20 @@ class AnnouncementController extends Controller {
         $entrepriseModel = new EntrepriseModel();
         $entreprises = $entrepriseModel->all();
         return $this->render('back/announcements/create', [
-            'entreprises' => $entreprises
+            'entreprises' => $entreprises,
+            'title' => 'Nouvelle annonce',
+            'active' => 'annonces'
+        ]);
+    }
+
+    public function archived() {
+        $model = new AnnonceModel();
+        $annonces = $model->getArchivedAnnonces();
+
+        return $this->render('back/announcements/archived', [
+            'annonces' => $annonces,
+            'title' => 'Archives',
+            'active' => 'archives'
         ]);
     }
 }

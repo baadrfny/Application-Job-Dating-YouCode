@@ -1,0 +1,21 @@
+{% extends "layouts/front.twig" %}
+
+{% block content %}
+    <div class="hero">
+        <h1>{{ offer.titre }}</h1>
+        <p>{{ company.nom }} - {{ offer.localisation }}</p>
+    </div>
+
+    <div class="offer-card" style="max-width: 720px;">
+        <img src="{{ offer.image|default('/public/assets/placeholder.svg') }}" alt="Offre">
+        <div class="offer-body">
+            <span class="pill">{{ offer.type_contrat }}</span>
+            <h3>Description</h3>
+            <p class="muted">{{ offer.description|default('Description non disponible.') }}</p>
+            {% if offer.competences %}
+                <h3>Competences</h3>
+                <p class="muted">{{ offer.competences }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

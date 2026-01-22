@@ -21,8 +21,15 @@ abstract class Controller
     public function render(string $view, array $data = []): string {
         $view = str_ends_with($view, '.twig') ? $view : $view . '.twig';
 
-        if (!isset($data['title'])) $data['title'] = 'Job Dating';
-    if (!isset($data['error_display'])) $data['error_display'] = 'none';
+        if (!isset($data['title'])) {
+            $data['title'] = 'Job Dating';
+        }
+        if (!isset($data['error_display'])) {
+            $data['error_display'] = 'none';
+        }
+        if (!isset($data['csrf_token'])) {
+            $data['csrf_token'] = Security::generateCSRFToken($this->csrfScope);
+        }
 
         return $this->twig->render($view, $data);
     }
