@@ -72,4 +72,24 @@ class AnnonceModel extends Model {
     $stmt->execute($params);
     return $stmt->fetchAll();
 }
+
+    // Search announcements by title, company name, and description
+    public function searchAnnonces(string $query): array {
+        $searchTerm = '%' . $query . '%';
+        $sql = "SELECT a.*, e.nom as entreprise_nom 
+                FROM annonces a 
+                JOIN entreprises e ON a.entreprise_id = e.id 
+                WHERE a.deleted_at = FALSE 
+                AND (a.titre LIKE :query1 
+                     OR a.description LIKE :query2 
+                     OR e.nom LIKE :query3)
+                ORDER BY a.created_at DESC";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':query1', $searchTerm);
+        $stmt->bindValue(':query2', $searchTerm);
+        $stmt->bindValue(':query3', $searchTerm);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
