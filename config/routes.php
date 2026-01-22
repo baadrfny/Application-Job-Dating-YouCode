@@ -21,7 +21,6 @@ $router->post('/logout', 'controllers\\front\\AuthController@logout');
 
 $router->get('/', 'controllers\\front\\JobController@index');
 $router->get('/annonces/filter', 'controllers\\front\\JobController@filter');
-require 'config/routes.php';
 
 // Back Office Routes (Admin)
 $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
