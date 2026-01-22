@@ -12,6 +12,8 @@ use models\Apprenant;
 
 class AuthController extends Controller
 {
+    protected string $csrfScope = 'apprenant';
+
     public function showLogin(Request $request): string
     {
         return $this->view('front.auth.login', [
@@ -34,6 +36,15 @@ class AuthController extends Controller
         $email = trim((string) $request->input('email', ''));
         $password = (string) $request->input('password', '');
 
+        [$canAttempt, $lockMessage] = Auth::canAttempt('apprenant', $email);
+        if (!$canAttempt) {
+            return $this->view('front.auth.login', [
+                'title' => 'Login',
+                'error' => $lockMessage,
+                'error_display' => 'block'
+            ]);
+        }
+
         if ($email === '' || $password === '') {
             return $this->view('front.auth.login', [
                 'title' => 'Login',
@@ -42,15 +53,16 @@ class AuthController extends Controller
             ]);
         }
 
-        if (!Auth::attempt($email, $password)) {
+        if (!Auth::attempt($email, $password, 'apprenant')) {
             return $this->view('front.auth.login', [
                 'title' => 'Login',
-                'error' => 'Invalid credentials.',
+                'error' => Auth::recordFailedAttempt('apprenant', $email),
                 'error_display' => 'block'
             ]);
         }
 
-        Response::redirect('/');
+        Auth::clearAttempts('apprenant', $email);
+        Response::redirect('/annonces');
         return ''; 
     }
 
@@ -124,8 +136,14 @@ class AuthController extends Controller
 
     public function logout(Request $request): string
     {
-        Auth::logout();
-        Response::redirect('/');
+        if (!$this->validateCSRF($request)) {
+            Response::redirect('/login');
+            return '';
+        }
+
+        Auth::logoutStudent();
+        Security::clearCSRFToken($this->csrfScope);
+        Response::redirect('/login');
         return ''; 
     }
 }

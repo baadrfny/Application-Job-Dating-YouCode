@@ -1,6 +1,32 @@
 <?php
 
-$router->get('/', 'controllers\\front\\JobController@index');
+$authApprenant = function (\core\Request $request) {
+    if (!\core\Session::checkTimeout()) {
+        \core\Response::redirect('/login');
+        return '';
+    }
+
+    if (!\core\Auth::checkStudent()) {
+        \core\Response::redirect('/login');
+        return '';
+    }
+
+    return true;
+};
+
+$authAdmin = function (\core\Request $request) {
+    if (!\core\Session::checkTimeout()) {
+        \core\Response::redirect('/admin/login');
+        return '';
+    }
+
+    if (!\core\Auth::checkAdmin()) {
+        \core\Response::redirect('/admin/login');
+        return '';
+    }
+
+    return true;
+};
 
 $router->get('/db-test', function (\core\Request $request) {
     try {
@@ -20,11 +46,19 @@ $router->post('/register', 'controllers\\front\\AuthController@register');
 $router->post('/logout', 'controllers\\front\\AuthController@logout');
 
 $router->get('/', 'controllers\\front\\JobController@index');
+$router->get('/annonces', 'controllers\\front\\JobController@index');
+$router->get('/annonces/{id}', 'controllers\\front\\JobController@show');
 $router->get('/annonces/filter', 'controllers\\front\\JobController@filter');
-// require 'config/routes.php';
 
 // Back Office Routes (Admin)
 $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
 $router->post('/admin/login', 'controllers\\back\\AuthController@login');
 $router->get('/admin/dashboard', 'controllers\\back\\DashboardController@index');
 $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
+
+$router->addMiddleware('/', $authApprenant);
+$router->addMiddleware('/annonces', $authApprenant);
+$router->addMiddleware('/annonces/{id}', $authApprenant);
+$router->addMiddleware('/annonces/filter', $authApprenant);
+
+$router->addMiddleware('/admin/dashboard', $authAdmin);
