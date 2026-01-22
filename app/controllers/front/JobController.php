@@ -55,19 +55,19 @@ class JobController extends Controller{
 
 
     public function filter($request) {
-    $search = $request->input('search');
-    $company_id = $request->input('company_id');
-    $contract_type = $request->input('contract_type');
-    
-  
-    if ($search) {
-        $offers = $this->announceModel->searchAnnonces($search);
-    } else {
-       
-        $offers = $this->announceModel->getFilteredAnnonces($company_id, $contract_type);
+        $search = $request->input('search');
+        $company_id = $request->input('company_id');
+        $contract_type = $request->input('contract_type');
+        
+        // If search query is provided, use search method
+        if ($search) {
+            $offers = $this->announceModel->searchAnnonces($search);
+        } else {
+            // Otherwise use filtered search
+            $offers = $this->announceModel->getFilteredAnnonces($company_id, $contract_type);
+        }
+        
+        header('Content-Type: application/json');
+        return json_encode($offers);
     }
-
-    header('Content-Type: application/json');
-    return json_encode($offers);
-}
 }
