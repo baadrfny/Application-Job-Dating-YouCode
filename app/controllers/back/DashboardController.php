@@ -28,7 +28,7 @@ class DashboardController extends Controller {
 
         // send all taht to Twig
 
-        return $this->view('back/dashboard/index', [
+        return $this->render('back/dashboard/index', [
             'stats' => $stats,
             'latestAnnonces' => $latestAnnonces
         ]);
