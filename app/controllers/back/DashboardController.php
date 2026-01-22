@@ -9,6 +9,8 @@ use core\Controller;
 class DashboardController extends Controller {
     
     public function index() {
+
+   
         
         $annonceModel = new AnnonceModel();
         $entrepriseModel = new EntrepriseModel();
@@ -25,7 +27,7 @@ class DashboardController extends Controller {
 
         //last 3 annonces
         $latestAnnonces = $annonceModel->getLatest(3);
-
+      
         // send all taht to Twig
 
         return $this->render('back/dashboard/index', [

@@ -8,7 +8,6 @@ use Twig\Loader\FilesystemLoader;
 abstract class Controller
 {
     protected Environment $twig;
-    protected string $csrfScope = 'app';
     public function __construct() {
     $loader = new FilesystemLoader(dirname(__DIR__) . '/views');
         $this->twig = new Environment($loader, [
@@ -18,13 +17,13 @@ abstract class Controller
         
     }
 
-    public function render(string $view, array $data = []): string {
+    public function render(string $view, array $data = []) {
         $view = str_ends_with($view, '.twig') ? $view : $view . '.twig';
 
         if (!isset($data['title'])) $data['title'] = 'Job Dating';
     if (!isset($data['error_display'])) $data['error_display'] = 'none';
 
-        return $this->twig->render($view, $data);
+        echo $this->twig->render($view, $data);
     }
 
 
@@ -39,13 +38,13 @@ abstract class Controller
         if (!array_key_exists('error_display', $data)) {
             $data['error_display'] = 'none';
         }
-        $data['csrf_token'] = Security::generateCSRFToken($this->csrfScope);
+        $data['csrf_token'] = Security::generateCSRFToken();
         return View::render($view, $data, $layout);
     }
 
     protected function requireAuth(): void
     {
-        if (!Auth::checkStudent()) {
+        if (!Auth::check()) {
             Response::redirect('/login');
             exit;
         }
@@ -53,8 +52,8 @@ abstract class Controller
 
     protected function requireAdmin(): void
     {
-        if (!Auth::checkAdmin()) {
-            Response::redirect('/admin/login');
+        if (!Auth::isAdmin()) {
+            Response::redirect('/login');
             exit;
         }
     }
@@ -62,7 +61,7 @@ abstract class Controller
     protected function validateCSRF(Request $request): bool
     {
         $token = $request->input('csrf_token', '');
-        return Security::verifyCSRFToken($token, $this->csrfScope);
+        return Security::verifyCSRFToken($token);
     }
 
 
