@@ -62,19 +62,12 @@ class JobController extends Controller{
         // If search query is provided, use search method
         if ($search) {
             $offers = $this->announceModel->searchAnnonces($search);
-        } else if ($company_id || $contract_type) {
+        } else {
             // Otherwise use filtered search
             $offers = $this->announceModel->getFilteredAnnonces($company_id, $contract_type);
-        } else {
-            // If no filters, get all active announcements
-            $offers = $this->announceModel->getActiveAnnonces();
         }
         
-        $companies = $this->companyModel->getAll();
-        
-        return $this->render('front/jobs/index', [
-            'offers' => $offers,
-            'companies' => $companies
-        ]);
+        header('Content-Type: application/json');
+        return json_encode($offers);
     }
 }

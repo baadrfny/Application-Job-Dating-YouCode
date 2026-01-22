@@ -8,15 +8,21 @@ class Session
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
-            
-            // Session timeout after 2 hours
-            if (isset($_SESSION['last_activity']) && 
-                (time() - $_SESSION['last_activity'] > 7200)) {
-                self::destroy();
-                return;
-            }
-            $_SESSION['last_activity'] = time();
         }
+    }
+
+    public static function checkTimeout(int $seconds = 7200): bool
+    {
+        self::start();
+        $last = $_SESSION['last_activity'] ?? null;
+
+        if ($last && (time() - $last > $seconds)) {
+            self::destroy();
+            return false;
+        }
+
+        $_SESSION['last_activity'] = time();
+        return true;
     }
 
     public static function set(string $key, $value): void
@@ -35,6 +41,14 @@ class Session
     {
         self::start();
         unset($_SESSION[$key]);
+    }
+
+    public static function forget(array $keys): void
+    {
+        self::start();
+        foreach ($keys as $key) {
+            unset($_SESSION[$key]);
+        }
     }
 
     public static function destroy(): void
