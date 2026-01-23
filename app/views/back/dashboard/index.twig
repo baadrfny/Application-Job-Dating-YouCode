@@ -36,7 +36,7 @@
 
             {% for annonce in latestAnnonces %}
                 <div class="announcement-row">
-                    <img class="announcement-img" src="{{ annonce.image|default('/public/assets/placeholder.svg') }}" alt="Annonce">
+                    <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Annonce">
                     <div>
                         <strong>{{ annonce.titre }}</strong>
                         <div class="muted">{{ annonce.entreprise_nom }}</div>

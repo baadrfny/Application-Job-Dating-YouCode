@@ -11,7 +11,7 @@
     <div class="card-grid">
         {% for annonce in annonces %}
             <div class="archive-card">
-                <img class="announcement-img" src="{{ annonce.image|default('/public/assets/placeholder.svg') }}" alt="Archive">
+                <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Archive">
                 <div style="margin-top: 12px;">
                     <span class="pill">Archivee</span>
                     <h3 style="margin: 10px 0 6px;">{{ annonce.titre }}</h3>

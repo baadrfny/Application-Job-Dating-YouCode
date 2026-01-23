@@ -36,6 +36,7 @@ CREATE TABLE entreprises (
     nom VARCHAR(150) NOT NULL,
     secteur VARCHAR(100),
     localisation VARCHAR(150),
+    image VARCHAR(255),
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(30)
 );

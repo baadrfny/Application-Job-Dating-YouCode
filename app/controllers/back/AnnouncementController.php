@@ -41,7 +41,7 @@ class AnnouncementController extends Controller {
             return '';
         }
 
-        $data = $this->extractAnnonceData($request);
+        $data = $this->extractAnnonceData($request, false);
         if ($data === null) {
             Response::redirect('/admin/annonces/create');
             return '';
@@ -74,7 +74,7 @@ class AnnouncementController extends Controller {
             return '';
         }
 
-        $data = $this->extractAnnonceData($request);
+        $data = $this->extractAnnonceData($request, true);
         if ($data === null) {
             Response::redirect('/admin/annonces/edit/' . $id);
             return '';
@@ -120,7 +120,7 @@ class AnnouncementController extends Controller {
         ]);
     }
 
-    private function extractAnnonceData(Request $request): ?array
+    private function extractAnnonceData(Request $request, bool $isUpdate): ?array
     {
         $titre = Security::sanitize((string) $request->input('titre', ''));
         $entrepriseId = (int) $request->input('entreprise_id', 0);
@@ -128,20 +128,72 @@ class AnnouncementController extends Controller {
         $typeContrat = Security::sanitize((string) $request->input('type_contrat', ''));
         $localisation = Security::sanitize((string) $request->input('localisation', ''));
         $competences = Security::sanitize((string) $request->input('competences', ''));
-        $image = Security::sanitize((string) $request->input('image', ''));
+        $imagePath = $this->handleImageUpload('image', 'annonces');
+        if ($imagePath === 'invalid') {
+            return null;
+        }
 
         if ($titre === '' || $entrepriseId <= 0) {
             return null;
         }
 
-        return [
+        $data = [
             'titre' => $titre,
             'entreprise_id' => $entrepriseId,
             'description' => $description,
             'type_contrat' => $typeContrat,
             'localisation' => $localisation,
             'competences' => $competences,
-            'image' => $image
         ];
+
+        if ($imagePath !== '') {
+            $data['image'] = $imagePath;
+        } elseif (!$isUpdate) {
+            $data['image'] = null;
+        }
+
+        return $data;
+    }
+
+    private function handleImageUpload(string $field, string $folder): string
+    {
+        if (!isset($_FILES[$field]) || !is_array($_FILES[$field])) {
+            return '';
+        }
+
+        $file = $_FILES[$field];
+        if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+            return '';
+        }
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return 'invalid';
+        }
+
+        $maxSize = 3 * 1024 * 1024;
+        if ($file['size'] > $maxSize) {
+            return 'invalid';
+        }
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+        if (!isset($allowed[$mime])) {
+            return 'invalid';
+        }
+
+        $root = dirname(__DIR__, 3);
+        $uploadDir = $root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $folder;
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $fileName = $folder . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $allowed[$mime];
+        $destination = $uploadDir . DIRECTORY_SEPARATOR . $fileName;
+        if (!move_uploaded_file($file['tmp_name'], $destination)) {
+            return 'invalid';
+        }
+
+        return '/uploads/' . $folder . '/' . $fileName;
     }
 }

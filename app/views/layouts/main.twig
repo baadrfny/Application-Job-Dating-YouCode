@@ -10,8 +10,9 @@
         :root {
             --ink: #0f1b2d;
             --muted: #5b677a;
-            --primary: #4f3cf7;
-            --primary-dark: #3d2cc4;
+            --primary: #3c54ff;
+            --primary-dark: #2a3fd6;
+            --accent: #11b3a4;
             --surface: #ffffff;
             --bg-top: #eef2ff;
             --bg-bottom: #e7eefb;
@@ -37,6 +38,19 @@
             align-items: center;
             justify-content: center;
             padding: 48px 20px;
+            position: relative;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+            top: -40px;
+            right: 12%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(17, 179, 164, 0.2), transparent 70%);
+            filter: blur(10px);
+            pointer-events: none;
         }
 
         .auth-card {
@@ -46,6 +60,7 @@
             padding: 36px 38px 30px;
             box-shadow: var(--shadow);
             border: 1px solid #eef1fb;
+            animation: rise 0.6s ease both;
         }
 
         .brand {
@@ -67,6 +82,7 @@
             font-size: 26px;
             font-weight: 700;
             box-shadow: 0 10px 25px rgba(79, 60, 247, 0.3);
+            animation: float 3.5s ease-in-out infinite;
         }
 
         .brand h1 {
@@ -111,7 +127,7 @@
             border: none;
             border-radius: 12px;
             padding: 13px 16px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             color: #fff;
             font-weight: 600;
             font-size: 15px;
@@ -164,6 +180,23 @@
         @media (max-width: 480px) {
             .auth-card {
                 padding: 28px 22px;
+            }
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>

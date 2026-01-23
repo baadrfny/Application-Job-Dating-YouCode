@@ -30,7 +30,7 @@
     <div id="offersContainer" class="offers-grid">
         {% for offer in offers %}
             <article class="offer-card">
-                <img src="{{ offer.image|default('/public/assets/placeholder.svg') }}" alt="Offre">
+                <img src="{{ offer.image|default('/assets/placeholder.svg') }}" alt="Offre">
                 <div class="offer-body">
                     <span class="pill">{{ offer.type_contrat }}</span>
                     <h3>{{ offer.titre }}</h3>
@@ -58,7 +58,7 @@
         let debounceTimer;
 
         const buildCard = (offer) => {
-            const image = offer.image ? offer.image : '/public/assets/placeholder.svg';
+            const image = offer.image ? offer.image : '/assets/placeholder.svg';
             return `
                 <article class="offer-card">
                     <img src="${image}" alt="Offre">

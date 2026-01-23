@@ -12,8 +12,9 @@
             --card: #ffffff;
             --text: #0f1c2e;
             --muted: #657489;
-            --primary: #4a3cf1;
-            --primary-dark: #3426c7;
+            --primary: #3c54ff;
+            --primary-dark: #2a3fd6;
+            --accent: #11b3a4;
             --border: #e5e9f3;
             --shadow: 0 16px 40px rgba(18, 30, 52, 0.12);
             --radius: 18px;
@@ -26,7 +27,7 @@
         body {
             margin: 0;
             font-family: "Space Grotesk", "Segoe UI", Arial, sans-serif;
-            background: var(--bg);
+            background: radial-gradient(1200px 680px at 10% -20%, #eef3ff 0, var(--bg) 55%);
             color: var(--text);
         }
 
@@ -86,6 +87,19 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 32px 36px 60px;
+            position: relative;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+            right: 5%;
+            top: -40px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(17, 179, 164, 0.18), transparent 70%);
+            filter: blur(12px);
+            pointer-events: none;
         }
 
         .hero h1 {
@@ -107,6 +121,7 @@
             border: 1px solid var(--border);
             padding: 14px;
             box-shadow: var(--shadow);
+            animation: rise 0.6s ease both;
         }
 
         .search-bar input {
@@ -138,6 +153,13 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             display: grid;
+            animation: rise 0.7s ease both;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(18, 30, 52, 0.16);
         }
 
         .offer-card img {
@@ -236,6 +258,18 @@
         .btn.primary {
             background: var(--primary);
             color: #fff;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
         }
 
         .table {

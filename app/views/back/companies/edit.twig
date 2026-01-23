@@ -4,7 +4,7 @@
     <div class="page-title">Modifier entreprise</div>
     <div class="page-subtitle">Mettre a jour les informations</div>
     <div class="panel">
-        <form method="post" action="/admin/entreprises/{{ entreprise.id }}">
+        <form method="post" action="/admin/entreprises/{{ entreprise.id }}" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <div class="form-grid">
@@ -27,6 +27,13 @@
                 <div class="form-group">
                     <label for="telephone">Telephone</label>
                     <input class="form-input" id="telephone" name="telephone" type="text" value="{{ entreprise.telephone }}">
+                </div>
+                <div class="form-group">
+                    <label for="image">Image / Logo</label>
+                    <input class="form-input" id="image" name="image" type="file" accept="image/*">
+                    {% if entreprise.image %}
+                        <div class="muted">Image actuelle: {{ entreprise.image }}</div>
+                    {% endif %}
                 </div>
             </div>
 

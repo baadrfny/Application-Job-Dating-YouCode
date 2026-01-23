@@ -12,7 +12,7 @@
     <div class="card-grid">
         {% for annonce in annonces %}
             <div class="announcement-card">
-                <img class="announcement-img" src="{{ annonce.image|default('/public/assets/placeholder.svg') }}" alt="Annonce">
+                <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Annonce">
                 <div style="margin-top: 12px;">
                     <strong>{{ annonce.titre }}</strong>
                     <div class="muted">{{ annonce.entreprise_nom }}</div>

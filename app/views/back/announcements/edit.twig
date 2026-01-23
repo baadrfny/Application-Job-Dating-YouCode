@@ -5,7 +5,7 @@
     <div class="page-subtitle">Mettre a jour l'annonce</div>
 
     <div class="panel">
-        <form method="post" action="/admin/annonces/{{ annonce.id }}">
+        <form method="post" action="/admin/annonces/{{ annonce.id }}" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <div class="form-grid">
@@ -36,8 +36,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="image">Image (URL)</label>
-                    <input class="form-input" id="image" name="image" type="text" value="{{ annonce.image }}">
+                    <label for="image">Image (fichier)</label>
+                    <input class="form-input" id="image" name="image" type="file" accept="image/*">
+                    {% if annonce.image %}
+                        <div class="muted">Image actuelle: {{ annonce.image }}</div>
+                    {% endif %}
                 </div>
 
                 <div class="form-group">

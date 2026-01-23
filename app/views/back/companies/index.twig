@@ -13,7 +13,11 @@
         {% for entreprise in entreprises %}
             <div class="company-card">
                 <div class="company-header">
-                    <div class="company-avatar">{{ entreprise.nom|slice(0,2)|upper }}</div>
+                    {% if entreprise.image %}
+                        <img class="company-avatar" src="{{ entreprise.image }}" alt="{{ entreprise.nom }}">
+                    {% else %}
+                        <div class="company-avatar">{{ entreprise.nom|slice(0,2)|upper }}</div>
+                    {% endif %}
                     <div>
                         <strong>{{ entreprise.nom }}</strong>
                         <div class="muted">{{ entreprise.secteur }}</div>
