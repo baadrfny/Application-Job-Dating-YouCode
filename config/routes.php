@@ -16,12 +16,12 @@ $authApprenant = function (\core\Request $request) {
 
 $authAdmin = function (\core\Request $request) {
     if (!\core\Session::checkTimeout()) {
-        \core\Response::redirect('/admin/login');
+        \core\Response::redirect('/login');
         return '';
     }
 
     if (!\core\Auth::checkAdmin()) {
-        \core\Response::redirect('/admin/login');
+        \core\Response::redirect('/login');
         return '';
     }
 
@@ -56,8 +56,10 @@ $router->get('/dashboard', 'controllers\\back\\DashboardController@index');
 
 
 // Back Office Routes (Admin)
-$router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
-$router->post('/admin/login', 'controllers\\back\\AuthController@login');
+$router->get('/admin/login', function (\core\Request $request) {
+    \core\Response::redirect('/login');
+    return '';
+});
 $router->get('/admin/dashboard', 'controllers\\back\\DashboardController@index');
 $router->get('/admin/annonces', 'controllers\\back\\AnnouncementController@index');
 $router->get('/admin/annonces/create', 'controllers\\back\\AnnouncementController@create');

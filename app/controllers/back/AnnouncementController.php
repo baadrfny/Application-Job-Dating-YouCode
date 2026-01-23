@@ -6,6 +6,7 @@ use models\AnnonceModel;
 use models\EntrepriseModel;
 
 class AnnouncementController extends Controller {
+    protected string $csrfScope = 'admin';
     
     // show annonces liste
     public function index() {

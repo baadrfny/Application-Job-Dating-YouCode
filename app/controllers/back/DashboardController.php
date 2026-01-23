@@ -9,6 +9,7 @@ use core\Auth;
 use models\User;
 
 class DashboardController extends Controller {
+    protected string $csrfScope = 'admin';
     
     public function index() {
         

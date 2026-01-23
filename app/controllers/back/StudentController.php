@@ -6,6 +6,7 @@ use core\Controller;
 use models\ApprenantModel;
 
 class StudentController extends Controller {
+    protected string $csrfScope = 'admin';
     public function index() {
         $apprenantModel = new ApprenantModel();
         $apprenants = $apprenantModel->getAllApprenants();

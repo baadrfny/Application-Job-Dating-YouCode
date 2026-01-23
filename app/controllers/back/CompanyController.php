@@ -6,6 +6,7 @@ use models\EntrepriseModel;
 use core\Controller;
 
 class CompanyController extends Controller {
+    protected string $csrfScope = 'admin';
 
     public function index() {
         $entrepriseModel = new EntrepriseModel();
