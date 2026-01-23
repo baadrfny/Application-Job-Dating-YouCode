@@ -18,4 +18,24 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="panel" style="margin-top: 22px; max-width: 720px;">
+        <h3>Postuler a cette offre</h3>
+        {% if already_applied %}
+            <p class="muted">Vous avez deja postule a cette offre.</p>
+        {% else %}
+            <form method="post" action="/annonces/{{ offer.id }}/postuler" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="field">
+                    <label for="motivation">Message de motivation</label>
+                    <textarea id="motivation" name="motivation" rows="5" class="field-input" required></textarea>
+                </div>
+                <div class="field">
+                    <label for="cv">CV (PDF uniquement)</label>
+                    <input id="cv" type="file" name="cv" accept="application/pdf" class="field-input">
+                </div>
+                <button class="btn primary" type="submit">Postuler</button>
+            </form>
+        {% endif %}
+    </div>
 {% endblock %}

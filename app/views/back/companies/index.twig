@@ -26,7 +26,10 @@
                 </div>
                 <div style="margin-top: 12px; display: flex; gap: 10px;">
                     <a class="link-primary" href="/admin/entreprises/edit/{{ entreprise.id }}">Modifier</a>
-                    <a class="link-primary" href="/admin/entreprises/delete/{{ entreprise.id }}">Supprimer</a>
+                    <form method="post" action="/admin/entreprises/{{ entreprise.id }}/delete">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn ghost" type="submit">Supprimer</button>
+                    </form>
                 </div>
             </div>
         {% else %}

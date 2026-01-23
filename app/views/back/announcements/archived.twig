@@ -23,7 +23,10 @@
                 </div>
                 <div class="muted" style="margin-top: 12px;">Creee le {{ annonce.created_at|date("d/m/Y") }}</div>
                 <div style="margin-top: 12px;">
-                    <a class="btn success" href="#">Restaurer</a>
+                    <form method="post" action="/admin/annonces/{{ annonce.id }}/restore">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn success" type="submit">Restaurer</button>
+                    </form>
                 </div>
             </div>
         {% else %}

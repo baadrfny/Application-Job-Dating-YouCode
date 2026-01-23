@@ -3,7 +3,9 @@ namespace controllers\front;
 
 use core\Controller;
 use core\Auth;
+use core\Response;
 use models\AnnonceModel;
+use models\Application;
 use models\Company;
 use models\User;
 
@@ -39,17 +41,25 @@ class JobController extends Controller{
     
     public function show($request, $id) {
         $offer = $this->announceModel->find($id);
-        
-        // if (!$offer || $offer['deleted_at'] == 1) {
-        //     http_response_code(404);
-        //     return "<h1>Error 404</h1><p>Offer not found</p>";
-        // }
-        
+
+        if (!$offer || (int) ($offer['deleted_at'] ?? 0) === 1) {
+            Response::redirect('/annonces');
+            return '';
+        }
+
         $company = $this->companyModel->findById($offer['entreprise_id']);
+        $studentId = Auth::id('apprenant');
+        $alreadyApplied = false;
+        if ($studentId) {
+            $alreadyApplied = (bool) (new Application())
+                ->findByStudentAndAnnouncement($studentId, (int) $id);
+        }
+
         return $this->render('front/jobs/show', [
             'offer' => $offer,
             'company' => $company,
-            'title' => $offer['titre'] ?? 'Offre'
+            'title' => $offer['titre'] ?? 'Offre',
+            'already_applied' => $alreadyApplied
         ]);
     }
 

@@ -23,8 +23,12 @@
                 </div>
                 <div class="muted" style="margin-top: 12px;">Creee le {{ annonce.created_at|date("d/m/Y") }}</div>
                 <div style="margin-top: 12px; display: flex; gap: 10px;">
-                    <a class="link-primary" href="#">Modifier</a>
-                    <a class="link-primary" href="#">Archiver</a>
+                    <a class="link-primary" href="/admin/annonces/edit/{{ annonce.id }}">Modifier</a>
+                    <a class="link-primary" href="/admin/annonces/{{ annonce.id }}/candidatures">Candidatures</a>
+                    <form method="post" action="/admin/annonces/{{ annonce.id }}/archive">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn ghost" type="submit">Archiver</button>
+                    </form>
                 </div>
             </div>
         {% else %}

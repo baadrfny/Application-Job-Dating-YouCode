@@ -77,6 +77,11 @@
             cursor: pointer;
         }
 
+        .nav-link {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
         .page {
             max-width: 1200px;
             margin: 0 auto;
@@ -187,6 +192,74 @@
             color: var(--muted);
         }
 
+        .panel,
+        .table-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .field label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .field-input {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn.primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .table th,
+        .table td {
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #eef2ff;
+            color: #3d3df1;
+            font-weight: 600;
+        }
+
         @media (max-width: 720px) {
             .topbar {
                 flex-direction: column;
@@ -208,6 +281,7 @@
         </div>
         <div class="user-box">
             <div>Connecte en tant que <strong>{{ student_name|default('Etudiant YouCode') }}</strong></div>
+            <a class="nav-link" href="/candidatures">Mes candidatures</a>
             <form method="post" action="/logout">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <button class="logout" type="submit">Deconnexion</button>

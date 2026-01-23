@@ -1,37 +1,37 @@
 {% extends "layouts/admin.twig" %}
 
 {% block content %}
-    <div class="page-title">Nouvelle entreprise</div>
-    <div class="page-subtitle">Ajouter une entreprise partenaire</div>
+    <div class="page-title">Modifier entreprise</div>
+    <div class="page-subtitle">Mettre a jour les informations</div>
     <div class="panel">
-        <form method="post" action="/admin/entreprises">
+        <form method="post" action="/admin/entreprises/{{ entreprise.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <div class="form-grid">
                 <div class="form-group">
                     <label for="nom">Nom</label>
-                    <input class="form-input" id="nom" name="nom" type="text" required>
+                    <input class="form-input" id="nom" name="nom" type="text" value="{{ entreprise.nom }}" required>
                 </div>
                 <div class="form-group">
                     <label for="secteur">Secteur</label>
-                    <input class="form-input" id="secteur" name="secteur" type="text">
+                    <input class="form-input" id="secteur" name="secteur" type="text" value="{{ entreprise.secteur }}">
                 </div>
                 <div class="form-group">
                     <label for="localisation">Localisation</label>
-                    <input class="form-input" id="localisation" name="localisation" type="text">
+                    <input class="form-input" id="localisation" name="localisation" type="text" value="{{ entreprise.localisation }}">
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-input" id="email" name="email" type="email" required>
+                    <input class="form-input" id="email" name="email" type="email" value="{{ entreprise.email }}" required>
                 </div>
                 <div class="form-group">
                     <label for="telephone">Telephone</label>
-                    <input class="form-input" id="telephone" name="telephone" type="text">
+                    <input class="form-input" id="telephone" name="telephone" type="text" value="{{ entreprise.telephone }}">
                 </div>
             </div>
 
             <div style="margin-top: 16px;">
-                <button class="btn success" type="submit">Enregistrer</button>
+                <button class="btn success" type="submit">Mettre a jour</button>
             </div>
         </form>
     </div>
