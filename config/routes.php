@@ -59,6 +59,13 @@ $router->get('/dashboard', 'controllers\\back\\DashboardController@index');
 $router->get('/admin/login', 'controllers\\back\\AuthController@showLogin');
 $router->post('/admin/login', 'controllers\\back\\AuthController@login');
 $router->get('/admin/dashboard', 'controllers\\back\\DashboardController@index');
+$router->get('/admin/annonces', 'controllers\\back\\AnnouncementController@index');
+$router->get('/admin/annonces/create', 'controllers\\back\\AnnouncementController@create');
+$router->post('/admin/annonces/create', 'controllers\\back\\AnnouncementController@store');
+$router->get('/admin/archives', 'controllers\\back\\AnnouncementController@archived');
+$router->get('/admin/entreprises', 'controllers\\back\\CompanyController@index');
+$router->get('/admin/entreprises/create', 'controllers\\back\\CompanyController@create');
+$router->get('/admin/apprenants', 'controllers\\back\\StudentController@index');
 $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
 
 $router->addMiddleware('/', $authApprenant);
@@ -67,3 +74,9 @@ $router->addMiddleware('/annonces/{id}', $authApprenant);
 $router->addMiddleware('/annonces/filter', $authApprenant);
 
 $router->addMiddleware('/admin/dashboard', $authAdmin);
+$router->addMiddleware('/admin/annonces', $authAdmin);
+$router->addMiddleware('/admin/annonces/create', $authAdmin);
+$router->addMiddleware('/admin/archives', $authAdmin);
+$router->addMiddleware('/admin/entreprises', $authAdmin);
+$router->addMiddleware('/admin/entreprises/create', $authAdmin);
+$router->addMiddleware('/admin/apprenants', $authAdmin);

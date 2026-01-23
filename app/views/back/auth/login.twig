@@ -1,0 +1,32 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+
+<div class="auth-card">
+    <div class="brand">
+        <div class="brand-mark">A</div>
+        <h1>iYouCode</h1>
+        <p>Administration</p>
+    </div>
+
+    <div class="error">{{ error }}</div>
+
+    <form method="post" action="/admin/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="admin@iyoucode.ma" required>
+        </div>
+
+        <div class="field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" name="password" placeholder="********" required>
+        </div>
+
+        <button class="btn-primary" type="submit">Se connecter</button>
+    </form>
+</div>
+{% endblock %}

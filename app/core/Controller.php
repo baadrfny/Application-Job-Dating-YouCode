@@ -8,6 +8,8 @@ use Twig\Loader\FilesystemLoader;
 abstract class Controller
 {
     protected Environment $twig;
+    protected string $csrfScope = 'default';
+
     public function __construct() {
     $loader = new FilesystemLoader(dirname(__DIR__) . '/views');
         $this->twig = new Environment($loader, [
@@ -18,10 +20,22 @@ abstract class Controller
     }
 
     public function render(string $view, array $data = []) {
+        $view = str_replace('.', '/', $view);
         $view = str_ends_with($view, '.twig') ? $view : $view . '.twig';
 
-        if (!isset($data['title'])) $data['title'] = 'Job Dating';
-    if (!isset($data['error_display'])) $data['error_display'] = 'none';
+        $data['title'] = $data['title'] ?? 'Job Dating';
+        $data['error'] = $data['error'] ?? '';
+        $data['error_display'] = $data['error_display'] ?? 'none';
+
+        if (!isset($data['title'])) {
+            $data['title'] = 'Job Dating';
+        }
+        if (!isset($data['error_display'])) {
+            $data['error_display'] = 'none';
+        }
+        if (!isset($data['csrf_token'])) {
+            $data['csrf_token'] = Security::generateCSRFToken($this->csrfScope);
+        }
 
         echo $this->twig->render($view, $data);
     }
@@ -39,7 +53,11 @@ abstract class Controller
             $data['error_display'] = 'none';
         }
         $data['csrf_token'] = Security::generateCSRFToken();
-        return View::render($view, $data, $layout);
+
+        $view = str_replace('.', '/', $view);
+        
+         $this->render($view, $data, $layout);
+         return '';
     }
 
     protected function requireAuth(): void

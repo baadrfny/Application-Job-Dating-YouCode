@@ -5,6 +5,8 @@ use models\AnnonceModel;
 use models\EntrepriseModel;
 use models\ApprenantModel;
 use core\Controller;
+use core\Auth;
+use models\User;
 
 class DashboardController extends Controller {
     
@@ -27,12 +29,23 @@ class DashboardController extends Controller {
 
         //last 3 annonces
         $latestAnnonces = $annonceModel->getLatest(3);
-      
+        $adminName = 'Administrateur';
+        $adminId = Auth::id('admin');
+        if ($adminId) {
+            $user = (new User())->find($adminId);
+            if ($user && !empty($user['name'])) {
+                $adminName = $user['name'];
+            }
+        }
+
         // send all taht to Twig
 
         return $this->render('back/dashboard/index', [
             'stats' => $stats,
-            'latestAnnonces' => $latestAnnonces
+            'latestAnnonces' => $latestAnnonces,
+            'title' => 'Dashboard',
+            'active' => 'dashboard',
+            'admin_name' => $adminName
         ]);
     }
 }

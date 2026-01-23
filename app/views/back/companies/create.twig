@@ -1,0 +1,37 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+<div class="page-title">Ajouter une Entreprise</div>
+<div class="page-subtitle">Enregistrer un nouveau partenaire Job Dating</div>
+
+<div class="panel" style="max-width: 600px; margin-top: 20px;">
+    <form action="/admin/entreprises/create" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="field">
+            <label>Nom de l'entreprise</label>
+            <input type="text" name="nom" placeholder="Ex: YouCode IT" required>
+        </div>
+
+        <div class="field">
+            <label>Secteur d'activité</label>
+            <input type="text" name="secteur" placeholder="Ex: Technologie, Banque, RH" required>
+        </div>
+
+        <div class="field">
+            <label>Site Web / URL Logo</label>
+            <input type="url" name="website" placeholder="https://www.example.com">
+        </div>
+
+        <div class="field">
+            <label>Contact Email</label>
+            <input type="email" name="contact_email" placeholder="contact@entreprise.ma">
+        </div>
+
+        <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button type="submit" class="btn success">Enregistrer l'entreprise</button>
+            <a href="/admin/dashboard" class="btn ghost">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

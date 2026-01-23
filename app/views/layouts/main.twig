@@ -152,7 +152,7 @@
         }
 
         .error {
-            display: {{ error_display }};
+           
             background: #ffe8e8;
             color: #8a1c1c;
             padding: 10px 12px;
@@ -170,10 +170,13 @@
 </head>
 <body>
     <div class="page">
-        
-{% block content %}
+    {% if error and error != '' %}
+       
+    {% endif %}
+    
+    {% block content %}
 
-{% endblock %}
+    {% endblock %}
     </div>
 </body>
 </html>

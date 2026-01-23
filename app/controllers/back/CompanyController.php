@@ -6,6 +6,24 @@ use models\EntrepriseModel;
 use core\Controller;
 
 class CompanyController extends Controller {
+
+    public function index() {
+        $entrepriseModel = new EntrepriseModel();
+        $entreprises = $entrepriseModel->all();
+
+        return $this->render('back/companies/index', [
+            'entreprises' => $entreprises,
+            'title' => 'Entreprises',
+            'active' => 'entreprises'
+        ]);
+    }
+
+    public function create() {
+        return $this->render('back/companies/create', [
+            'title' => 'Nouvelle entreprise',
+            'active' => 'entreprises'
+        ]);
+    }
     
     public function delete($id) {
         $entrepriseModel = new EntrepriseModel();

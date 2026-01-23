@@ -16,7 +16,7 @@ class AuthController extends Controller
 
     public function showLogin(Request $request): string
     {
-        return $this->view('front.auth.login', [
+        return $this->view('front/auth/login', [
             'title' => 'Login',
             'error' => '',
             'error_display' => 'none'

@@ -1,0 +1,64 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+<div class="page-title">Créer une Annonce</div>
+<div class="page-subtitle">Ajouter une nouvelle opportunité pour les apprenants</div>
+
+<div class="panel" style="max-width: 800px; margin-top: 20px;">
+    {% if error %}
+        <div class="error" style="display: block; margin-bottom: 20px; color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px;">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form action="/admin/annonces/create" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="field">
+            <label>Titre de l'annonce</label>
+            <input type="text" name="titre" placeholder="Ex: Développeur PHP Fullstack" required>
+        </div>
+
+        <div class="field">
+            <label>Entreprise</label>
+            <select name="entreprise_id" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #d8def0; background: white;">
+                <option value="">Sélectionner une entreprise</option>
+                {% for entreprise in entreprises %}
+                    <option value="{{ entreprise.id }}">{{ entreprise.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="content-grid" style="grid-template-columns: 1fr 1fr; gap: 20px; display: grid;">
+            <div class="field">
+                <label>Type de contrat</label>
+                <input type="text" name="type_contrat" placeholder="Ex: CDI, Stage, Freelance">
+            </div>
+            <div class="field">
+                <label>Localisation</label>
+                <input type="text" name="localisation" placeholder="Ex: Casablanca / Hybride">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Compétences requises</label>
+            <input type="text" name="competences" placeholder="Ex: PHP, JavaScript, SQL">
+        </div>
+
+        <div class="field">
+            <label>URL de l'image (Optionnel)</label>
+            <input type="text" name="image" placeholder="Ex: /public/assets/img/job.png">
+        </div>
+
+        <div class="field">
+            <label>Description</label>
+            <textarea name="description" rows="5" style="width: 100%; border-radius: 12px; border: 1px solid #d8def0; padding: 12px; font-family: inherit;" placeholder="Détails de l'offre..."></textarea>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button type="submit" class="btn primary">Publier l'annonce</button>
+            <a href="/admin/annonces" class="btn ghost">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
