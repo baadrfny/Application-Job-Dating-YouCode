@@ -105,3 +105,5 @@ class AnnonceModel extends Model {
         return $stmt->fetchAll();
     }
 }
+
+
