@@ -71,18 +71,27 @@
             margin-bottom: 24px;
         }
 
-        .brand-mark {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--primary);
+        .logo-mark {
+            width: 64px;
+            height: 64px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
+            padding: 6px;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 12px 30px rgba(17, 24, 39, 0.2);
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        .logo-mark span {
             display: grid;
             place-items: center;
-            color: #fff;
-            font-size: 26px;
             font-weight: 700;
-            box-shadow: 0 10px 25px rgba(79, 60, 247, 0.3);
-            animation: float 3.5s ease-in-out infinite;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff5a2f, #ff8a3d);
         }
 
         .brand h1 {

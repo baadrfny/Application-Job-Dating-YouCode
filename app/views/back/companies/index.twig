@@ -11,7 +11,7 @@
 
     <div class="card-grid">
         {% for entreprise in entreprises %}
-            <div class="company-card">
+            <div class="company-card" data-search="{{ entreprise.nom }} {{ entreprise.secteur }} {{ entreprise.localisation }} {{ entreprise.email }} {{ entreprise.telephone }}">
                 <div class="company-header">
                     {% if entreprise.image %}
                         <img class="company-avatar" src="{{ entreprise.image }}" alt="{{ entreprise.nom }}">

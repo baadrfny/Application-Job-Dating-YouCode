@@ -10,7 +10,7 @@
 
     <div class="card-grid">
         {% for annonce in annonces %}
-            <div class="archive-card">
+            <div class="archive-card" data-search="{{ annonce.titre }} {{ annonce.entreprise_nom }} {{ annonce.type_contrat }} {{ annonce.localisation }}">
                 <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Archive">
                 <div style="margin-top: 12px;">
                     <span class="pill">Archivee</span>

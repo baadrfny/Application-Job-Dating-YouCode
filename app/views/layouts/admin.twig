@@ -108,6 +108,18 @@
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
         }
 
+        .nav a.active::after,
+        .nav a:hover::after {
+            content: "";
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            box-shadow: 0 0 12px rgba(17, 179, 164, 0.6);
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
         .sidebar-footer {
             margin-top: auto;
             background: rgba(255, 255, 255, 0.1);
@@ -170,6 +182,7 @@
             display: grid;
             gap: 12px;
             animation: rise 0.6s ease both;
+            animation-delay: calc(var(--stagger-index, 0) * 60ms);
         }
 
         .stat-icon {
@@ -179,6 +192,17 @@
             display: grid;
             place-items: center;
             font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-icon::after {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            opacity: 0.35;
         }
 
         .stat-icon.blue { background: #e7edff; color: #3563ff; }
@@ -208,6 +232,7 @@
             padding: 22px;
             box-shadow: var(--shadow);
             animation: rise 0.7s ease both;
+            animation-delay: calc(var(--stagger-index, 0) * 60ms);
         }
 
         .panel-header {
@@ -275,11 +300,31 @@
             border: none;
             font-weight: 600;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn.primary {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: #fff;
+        }
+
+        .btn.primary::after,
+        .btn.success::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+        }
+
+        .btn.primary:hover::after,
+        .btn.success:hover::after {
+            left: 120%;
         }
 
         .btn.success {
@@ -341,6 +386,15 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             animation: rise 0.65s ease both;
+            animation-delay: calc(var(--stagger-index, 0) * 50ms);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .company-card:hover,
+        .archive-card:hover,
+        .announcement-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 48px rgba(17, 24, 39, 0.16);
         }
 
         .company-header {
@@ -430,6 +484,11 @@
             to { opacity: 1; }
         }
 
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.15); opacity: 0.6; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation: none !important;
@@ -517,5 +576,49 @@
         {% block content %}{% endblock %}
     </main>
 </div>
+<script>
+    const setStagger = (selector) => {
+        const items = document.querySelectorAll(selector);
+        items.forEach((item, index) => {
+            item.style.setProperty('--stagger-index', index);
+        });
+    };
+
+    setStagger('.stat-card');
+    setStagger('.panel');
+    setStagger('.announcement-card');
+    setStagger('.company-card');
+    setStagger('.archive-card');
+    setStagger('.table-card');
+
+    document.querySelectorAll('.search-bar input').forEach((input) => {
+        const container = input.closest('.admin-main') || document;
+        const cardGrid = container.querySelector('.card-grid');
+        const table = container.querySelector('.table');
+
+        const cards = cardGrid ? Array.from(cardGrid.children) : [];
+        const rows = table ? Array.from(table.querySelectorAll('tbody tr')) : [];
+
+        const updateVisibility = () => {
+            const query = input.value.trim().toLowerCase();
+
+            if (cards.length) {
+                cards.forEach((card) => {
+                    const haystack = (card.dataset.search || card.innerText).toLowerCase();
+                    card.style.display = haystack.includes(query) ? '' : 'none';
+                });
+            }
+
+            if (rows.length) {
+                rows.forEach((row) => {
+                    const haystack = (row.dataset.search || row.innerText).toLowerCase();
+                    row.style.display = haystack.includes(query) ? '' : 'none';
+                });
+            }
+        };
+
+        input.addEventListener('input', updateVisibility);
+    });
+</script>
 </body>
 </html>

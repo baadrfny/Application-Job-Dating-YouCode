@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 {% for apprenant in apprenants %}
-                    <tr>
+                    <tr data-search="{{ apprenant.name }} {{ apprenant.email }} {{ apprenant.promotion|default('') }} {{ apprenant.specialisation|default('') }}">
                         <td>{{ apprenant.name }}</td>
                         <td>{{ apprenant.email }}</td>
                         <td><span class="badge">{{ apprenant.promotion|default('N/A') }}</span></td>

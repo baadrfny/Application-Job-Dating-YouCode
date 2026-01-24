@@ -51,6 +51,7 @@ class AnnouncementController extends Controller {
         Response::redirect('/admin/annonces');
         return '';
     }
+    
 
     public function edit(Request $request, $id): string
     {
