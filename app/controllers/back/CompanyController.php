@@ -135,8 +135,6 @@ class CompanyController extends Controller {
 
         if ($imagePath !== '') {
             $data['image'] = $imagePath;
-        } elseif (!$isUpdate) {
-            $data['image'] = null;
         }
 
         return $data;
