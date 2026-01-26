@@ -47,9 +47,9 @@ $router->post('/logout', 'controllers\\front\\AuthController@logout');
 
 $router->get('/', 'controllers\\front\\JobController@index');
 $router->get('/annonces', 'controllers\\front\\JobController@index');
-$router->get('/annonces/{id}', 'controllers\\front\\JobController@show');
 $router->get('/annonces/filter', 'controllers\\front\\JobController@filter');
-$router->post('/annonces/{id}/postuler', 'controllers\\front\\ApplicationController@store');
+$router->get('/annonces/{id:\\d+}', 'controllers\\front\\JobController@show');
+$router->post('/annonces/{id:\\d+}/postuler', 'controllers\\front\\ApplicationController@store');
 $router->get('/candidatures', 'controllers\\front\\ApplicationController@index');
 
 
@@ -83,9 +83,9 @@ $router->post('/admin/logout', 'controllers\\back\\AuthController@logout');
 
 $router->addMiddleware('/', $authApprenant);
 $router->addMiddleware('/annonces', $authApprenant);
-$router->addMiddleware('/annonces/{id}', $authApprenant);
+$router->addMiddleware('/annonces/{id:\\d+}', $authApprenant);
 $router->addMiddleware('/annonces/filter', $authApprenant);
-$router->addMiddleware('/annonces/{id}/postuler', $authApprenant);
+$router->addMiddleware('/annonces/{id:\\d+}/postuler', $authApprenant);
 $router->addMiddleware('/candidatures', $authApprenant);
 
 $router->addMiddleware('/admin/dashboard', $authAdmin);

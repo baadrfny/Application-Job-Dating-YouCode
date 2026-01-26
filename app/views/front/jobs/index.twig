@@ -1,46 +1,92 @@
 {% extends "layouts/front.twig" %}
 
 {% block content %}
-    <section class="hero">
-        <h1>Trouvez votre opportunite professionnelle</h1>
-        <p>{{ offers|length }} offre(s) disponible(s)</p>
+    <section class="hero hero-grid">
+        <div class="hero-content">
+            <span class="eyebrow">Espace apprenant</span>
+            <h1>Trouvez votre prochaine opportunite pro</h1>
+            <p>{{ offers|length }} offre(s) actives, {{ companies|length }} entreprise(s) en recherche de talents.</p>
+            <div class="hero-metrics">
+                <div class="metric-card">
+                    <span>Offres actives</span>
+                    <strong>{{ offers|length }}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>Entreprises partenaires</span>
+                    <strong>{{ companies|length }}</strong>
+                </div>
+                <div class="metric-card accent">
+                    <span>Priorite</span>
+                    <strong>Completer votre profil</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-card-header">
+                <span class="card-label">Plan d action</span>
+                <span class="status-chip">Semaine en cours</span>
+            </div>
+            <h3>Restez visible et actif</h3>
+            <p class="muted">Affinez vos recherches et ciblez les offres qui matchent vos competences.</p>
+            <div class="hero-checklist">
+                <div class="check-item">Choisir un type de contrat cible</div>
+                <div class="check-item">Verifier les entreprises partenaires</div>
+                <div class="check-item">Envoyer un message clair et bref</div>
+            </div>
+        </div>
     </section>
 
     <div class="search-bar">
-        <input id="searchInput" type="text" placeholder="Rechercher par titre, entreprise ou description...">
-        <button id="filterBtn" class="filter-btn" type="button">Filtres</button>
+        <div class="search-input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M20 20l-3.5-3.5"></path>
+            </svg>
+            <input id="searchInput" type="text" placeholder="Rechercher par titre, entreprise ou description...">
+        </div>
+        <button id="filterBtn" class="btn primary" type="button">Filtrer</button>
     </div>
 
-    <div style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap;">
-        <select id="companyFilter" class="filter-btn">
-            <option value="">Toutes les entreprises</option>
-            {% for company in companies %}
-                <option value="{{ company.id }}">{{ company.nom }}</option>
-            {% endfor %}
-        </select>
-        <select id="contractFilter" class="filter-btn">
-            <option value="">Tous les contrats</option>
-            <option value="CDI">CDI</option>
-            <option value="CDD">CDD</option>
-            <option value="Stage">Stage</option>
-            <option value="Freelance">Freelance</option>
-        </select>
+    <div class="filter-row">
+        <div class="filter-group">
+            <label for="companyFilter">Entreprise</label>
+            <select id="companyFilter" class="filter-select">
+                <option value="">Toutes les entreprises</option>
+                {% for company in companies %}
+                    <option value="{{ company.id }}">{{ company.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="contractFilter">Type de contrat</label>
+            <select id="contractFilter" class="filter-select">
+                <option value="">Tous les contrats</option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="Stage">Stage</option>
+                <option value="Freelance">Freelance</option>
+            </select>
+        </div>
     </div>
 
     <div id="offersContainer" class="offers-grid">
         {% for offer in offers %}
             <article class="offer-card">
-                <img src="{{ offer.image|default('/assets/placeholder.svg') }}" alt="Offre">
+                <div class="offer-media">
+                    <img src="{{ offer.image|default('/assets/placeholder.svg') }}" alt="Offre">
+                    <span class="offer-type">{{ offer.type_contrat|default('Contrat') }}</span>
+                </div>
                 <div class="offer-body">
-                    <span class="pill">{{ offer.type_contrat }}</span>
-                    <h3>{{ offer.titre }}</h3>
+                    <h3 class="offer-title">{{ offer.titre }}</h3>
+                    <div class="offer-company">{{ offer.entreprise_nom }}</div>
                     <div class="offer-meta">
-                        <div>{{ offer.entreprise_nom }}</div>
-                        <div>{{ offer.localisation }}</div>
+                        <span>{{ offer.localisation }}</span>
+                        <span>{{ offer.created_at|date("d/m/Y") }}</span>
                     </div>
                     <div class="offer-footer">
                         <a class="details-link" href="/annonces/{{ offer.id }}">Voir details</a>
-                        <span class="muted">{{ offer.created_at|date("d/m/Y") }}</span>
+                        <span class="muted">Publie le {{ offer.created_at|date("d/m/Y") }}</span>
                     </div>
                 </div>
             </article>
@@ -59,19 +105,24 @@
 
         const buildCard = (offer) => {
             const image = offer.image ? offer.image : '/assets/placeholder.svg';
+            const contract = offer.type_contrat ? offer.type_contrat : 'Contrat';
+            const localisation = offer.localisation ? offer.localisation : 'Localisation';
             return `
                 <article class="offer-card">
-                    <img src="${image}" alt="Offre">
+                    <div class="offer-media">
+                        <img src="${image}" alt="Offre">
+                        <span class="offer-type">${contract}</span>
+                    </div>
                     <div class="offer-body">
-                        <span class="pill">${offer.type_contrat}</span>
-                        <h3>${offer.titre}</h3>
+                        <h3 class="offer-title">${offer.titre}</h3>
+                        <div class="offer-company">${offer.entreprise_nom}</div>
                         <div class="offer-meta">
-                            <div>${offer.entreprise_nom}</div>
-                            <div>${offer.localisation}</div>
+                            <span>${localisation}</span>
+                            <span>${offer.created_at}</span>
                         </div>
                         <div class="offer-footer">
                             <a class="details-link" href="/annonces/${offer.id}">Voir details</a>
-                            <span class="muted">${offer.created_at}</span>
+                            <span class="muted">Publie le ${offer.created_at}</span>
                         </div>
                     </div>
                 </article>
