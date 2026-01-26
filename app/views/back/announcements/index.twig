@@ -1,0 +1,38 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Gestion des annonces</div>
+    <div class="page-subtitle">{{ annonces|length }} annonce(s) active(s)</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher une annonce...">
+        <a class="btn primary" href="/admin/annonces/create">Nouvelle annonce</a>
+    </div>
+
+    <div class="card-grid">
+        {% for annonce in annonces %}
+            <div class="announcement-card" data-search="{{ annonce.titre }} {{ annonce.entreprise_nom }} {{ annonce.type_contrat }} {{ annonce.localisation }}">
+                <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Annonce">
+                <div style="margin-top: 12px;">
+                    <strong>{{ annonce.titre }}</strong>
+                    <div class="muted">{{ annonce.entreprise_nom }}</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="pill">{{ annonce.type_contrat }}</span>
+                    <span class="pill">{{ annonce.localisation }}</span>
+                </div>
+                <div class="muted" style="margin-top: 12px;">Creee le {{ annonce.created_at|date("d/m/Y") }}</div>
+                <div style="margin-top: 12px; display: flex; gap: 10px;">
+                    <a class="link-primary" href="/admin/annonces/edit/{{ annonce.id }}">Modifier</a>
+                    <a class="link-primary" href="/admin/annonces/{{ annonce.id }}/candidatures">Candidatures</a>
+                    <form method="post" action="/admin/annonces/{{ annonce.id }}/archive">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn ghost" type="submit">Archiver</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="muted">Aucune annonce active.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

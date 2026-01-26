@@ -5,17 +5,20 @@ use models\AnnonceModel;
 use models\EntrepriseModel;
 use models\ApprenantModel;
 use core\Controller;
+use core\Auth;
+use core\Request;
+use models\User;
 
 class DashboardController extends Controller {
+    protected string $csrfScope = 'admin';
     
-    public function index() {
+    public function index(Request $request) {
         
         $annonceModel = new AnnonceModel();
         $entrepriseModel = new EntrepriseModel();
         $apprenantModel = new ApprenantModel();
 
 
-        //statistiques
         $stats = [
             'active_annonces'   => $annonceModel->count("deleted_at = 0"),
             'archived_annonces' => $annonceModel->count("deleted_at = 1"),
@@ -23,14 +26,25 @@ class DashboardController extends Controller {
             'total_apprenants'  => $apprenantModel->count()
         ];
 
-        //last 3 annonces
+       
         $latestAnnonces = $annonceModel->getLatest(3);
+        $adminName = 'Administrateur';
+        $adminId = Auth::id('admin');
+        if ($adminId) {
+            $user = (new User())->find($adminId);
+            if ($user && !empty($user['name'])) {
+                $adminName = $user['name'];
+            }
+        }
 
-        // send all taht to Twig
+       
 
         return $this->render('back/dashboard/index', [
             'stats' => $stats,
-            'latestAnnonces' => $latestAnnonces
+            'latestAnnonces' => $latestAnnonces,
+            'title' => 'Dashboard',
+            'active' => 'dashboard',
+            'admin_name' => $adminName
         ]);
     }
 }

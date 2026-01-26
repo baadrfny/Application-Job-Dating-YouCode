@@ -1,0 +1,66 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Candidatures</div>
+    <div class="page-subtitle">{{ applications|length }} candidature(s)</div>
+
+    <div class="table-card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Apprenant</th>
+                    <th>Email</th>
+                    <th>Promotion</th>
+                    <th>Specialisation</th>
+                    <th>Motivation</th>
+                    <th>CV</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.name }}</td>
+                        <td>{{ application.email }}</td>
+                        <td>{{ application.promotion|default('N/A') }}</td>
+                        <td>{{ application.specialisation|default('N/A') }}</td>
+                        <td>{{ application.motivation }}</td>
+                        <td>
+                            {% if application.cv_path %}
+                                <a class="link-primary" href="/admin/candidatures/{{ application.id }}/cv">Telecharger</a>
+                            {% else %}
+                                <span class="muted">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if application.status == 'accepted' %}
+                                <span class="badge">Acceptee</span>
+                            {% elseif application.status == 'rejected' %}
+                                <span class="badge">Refusee</span>
+                            {% else %}
+                                <span class="badge">En attente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="post" action="/admin/candidatures/{{ application.id }}/status">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="announcement_id" value="{{ application.announcement_id }}">
+                                <select name="status" class="select">
+                                    <option value="pending" {{ application.status == 'pending' ? 'selected' : '' }}>En attente</option>
+                                    <option value="accepted" {{ application.status == 'accepted' ? 'selected' : '' }}>Acceptee</option>
+                                    <option value="rejected" {{ application.status == 'rejected' ? 'selected' : '' }}>Refusee</option>
+                                </select>
+                                <button class="btn ghost" type="submit">Mettre a jour</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="muted">Aucune candidature.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

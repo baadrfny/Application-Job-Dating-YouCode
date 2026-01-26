@@ -1,0 +1,58 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Nouvelle annonce</div>
+    <div class="page-subtitle">Creer une nouvelle offre d'emploi</div>
+
+    <div class="panel">
+        <form method="post" action="/admin/annonces" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="titre">Titre</label>
+                    <input class="form-input" id="titre" name="titre" type="text" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="entreprise_id">Entreprise</label>
+                    <select class="form-select" id="entreprise_id" name="entreprise_id" required>
+                        <option value="">Choisir une entreprise</option>
+                        {% for entreprise in entreprises %}
+                            <option value="{{ entreprise.id }}">{{ entreprise.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="type_contrat">Type de contrat</label>
+                    <input class="form-input" id="type_contrat" name="type_contrat" type="text">
+                </div>
+
+                <div class="form-group">
+                    <label for="localisation">Localisation</label>
+                    <input class="form-input" id="localisation" name="localisation" type="text">
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image (fichier)</label>
+                    <input class="form-input" id="image" name="image" type="file" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="competences">Competences</label>
+                    <textarea class="form-textarea" id="competences" name="competences"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-textarea" id="description" name="description"></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <button class="btn primary" type="submit">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

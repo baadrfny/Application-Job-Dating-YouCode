@@ -1,0 +1,62 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Modifier annonce</div>
+    <div class="page-subtitle">Mettre a jour l'annonce</div>
+
+    <div class="panel">
+        <form method="post" action="/admin/annonces/{{ annonce.id }}" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="titre">Titre</label>
+                    <input class="form-input" id="titre" name="titre" type="text" value="{{ annonce.titre }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="entreprise_id">Entreprise</label>
+                    <select class="form-select" id="entreprise_id" name="entreprise_id" required>
+                        {% for entreprise in entreprises %}
+                            <option value="{{ entreprise.id }}" {{ entreprise.id == annonce.entreprise_id ? 'selected' : '' }}>
+                                {{ entreprise.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="type_contrat">Type de contrat</label>
+                    <input class="form-input" id="type_contrat" name="type_contrat" type="text" value="{{ annonce.type_contrat }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="localisation">Localisation</label>
+                    <input class="form-input" id="localisation" name="localisation" type="text" value="{{ annonce.localisation }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image (fichier)</label>
+                    <input class="form-input" id="image" name="image" type="file" accept="image/*">
+                    {% if annonce.image %}
+                        <div class="muted">Image actuelle: {{ annonce.image }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="competences">Competences</label>
+                    <textarea class="form-textarea" id="competences" name="competences">{{ annonce.competences }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-textarea" id="description" name="description">{{ annonce.description }}</textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <button class="btn primary" type="submit">Mettre a jour</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

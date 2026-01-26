@@ -1,173 +1,160 @@
-{% extends "layouts/main.twig" %}
-
-{% block title %}Explorer les Offres{% endblock %}
+{% extends "layouts/front.twig" %}
 
 {% block content %}
-
-<!-- HERO -->
-<section class="w-full py-16">
-  <div class="max-w-screen-2xl mx-auto px-6 text-center">
-    <h1 class="text-5xl font-bold mb-4">
-      Trouvez votre <span class="text-indigo-600">opportunité idéale</span>
-    </h1>
-    <p class="text-lg text-gray-500">
-      Explorez les meilleures offres proposées par nos partenaires
-    </p>
-  </div>
-</section>
-
-<!-- MAIN LAYOUT -->
-<section class="w-full py-16">
-  <div class="max-w-screen-2xl mx-auto px-6 grid lg:grid-cols-4 gap-10">
-
-    <!-- FILTERS -->
-    <aside class="lg:col-span-1 bg-white rounded-2xl p-6 shadow border">
-      <h3 class="font-bold text-lg mb-6">Filtrer les offres</h3>
-
-      <div class="space-y-4">
-        <div>
-          <input type="text" id="searchInput" placeholder="Titre, entreprise, compétences..."
-                 class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-600">
-          <small class="text-gray-400">⏱️ Recherche en temps réel</small>
+    <section class="hero hero-grid">
+        <div class="hero-content">
+            <span class="eyebrow">Espace apprenant</span>
+            <h1>Trouvez votre prochaine opportunite pro</h1>
+            <p>{{ offers|length }} offre(s) actives, {{ companies|length }} entreprise(s) en recherche de talents.</p>
+            <div class="hero-metrics">
+                <div class="metric-card">
+                    <span>Offres actives</span>
+                    <strong>{{ offers|length }}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>Entreprises partenaires</span>
+                    <strong>{{ companies|length }}</strong>
+                </div>
+                <div class="metric-card accent">
+                    <span>Priorite</span>
+                    <strong>Completer votre profil</strong>
+                </div>
+            </div>
         </div>
 
-        <select id="companyFilter" class="w-full px-4 py-3 border rounded-xl">
-          <option value="">Toutes les entreprises</option>
-          {% for company in companies %}
-            <option value="{{ company.id }}">{{ company.nom }}</option>
-          {% endfor %}
-        </select>
-
-        <select id="contractFilter" class="w-full px-4 py-3 border rounded-xl">
-          <option value="">Tous les contrats</option>
-          <option value="CDI">CDI</option>
-          <option value="CDD">CDD</option>
-          <option value="Stage">Stage</option>
-          <option value="Freelance">Freelance</option>
-        </select>
-
-        <button id="filterBtn" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition">
-          Filtrer
-        </button>
-      </div>
-    </aside>
-
-    <!-- OFFERS GRID -->
-    <div class="lg:col-span-3">
-      <div id="offersContainer" class="grid md:grid-cols-2 xl:grid-cols-2 gap-6">
-
-        {% for offer in offers %}
-        <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-xl transition">
-          <span class="text-xs bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full">
-            {{ offer.type_contrat }}
-          </span>
-
-          <h3 class="text-lg font-bold mt-3">{{ offer.titre }}</h3>
-          <p class="text-sm text-gray-500">{{ offer.entreprise_nom }}</p>
-
-          <p class="mt-3 text-sm text-gray-600">
-            {% if offer.description|length > 100 %}
-              {{ offer.description|slice(0,100) }}...
-            {% else %}
-              {{ offer.description }}
-            {% endif %}
-          </p>
-
-          <a href="/annonces/show/{{ offer.id }}"
-             class="inline-block mt-4 text-indigo-600 font-semibold">
-            Voir détails →
-          </a>
+        <div class="hero-card">
+            <div class="hero-card-header">
+                <span class="card-label">Plan d action</span>
+                <span class="status-chip">Semaine en cours</span>
+            </div>
+            <h3>Restez visible et actif</h3>
+            <p class="muted">Affinez vos recherches et ciblez les offres qui matchent vos competences.</p>
+            <div class="hero-checklist">
+                <div class="check-item">Choisir un type de contrat cible</div>
+                <div class="check-item">Verifier les entreprises partenaires</div>
+                <div class="check-item">Envoyer un message clair et bref</div>
+            </div>
         </div>
-        {% else %}
-        <div class="col-span-2 text-center py-12 text-gray-500">
-          <p class="text-lg">📭 Aucune offre disponible</p>
-        </div>
-        {% endfor %}
+    </section>
 
-      </div>
+    <div class="search-bar">
+        <div class="search-input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M20 20l-3.5-3.5"></path>
+            </svg>
+            <input id="searchInput" type="text" placeholder="Rechercher par titre, entreprise ou description...">
+        </div>
+        <button id="filterBtn" class="btn primary" type="button">Filtrer</button>
     </div>
 
-  </div>
-</section>
+    <div class="filter-row">
+        <div class="filter-group">
+            <label for="companyFilter">Entreprise</label>
+            <select id="companyFilter" class="filter-select">
+                <option value="">Toutes les entreprises</option>
+                {% for company in companies %}
+                    <option value="{{ company.id }}">{{ company.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="contractFilter">Type de contrat</label>
+            <select id="contractFilter" class="filter-select">
+                <option value="">Tous les contrats</option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
+                <option value="Stage">Stage</option>
+                <option value="Freelance">Freelance</option>
+            </select>
+        </div>
+    </div>
 
-<script>
-  const searchInput = document.getElementById('searchInput');
-  const companyFilter = document.getElementById('companyFilter');
-  const contractFilter = document.getElementById('contractFilter');
-  const filterBtn = document.getElementById('filterBtn');
-  const offersContainer = document.getElementById('offersContainer');
-  
-  let debounceTimer;
+    <div id="offersContainer" class="offers-grid">
+        {% for offer in offers %}
+            <article class="offer-card">
+                <div class="offer-media">
+                    <img src="{{ offer.image|default('/assets/placeholder.svg') }}" alt="Offre">
+                    <span class="offer-type">{{ offer.type_contrat|default('Contrat') }}</span>
+                </div>
+                <div class="offer-body">
+                    <h3 class="offer-title">{{ offer.titre }}</h3>
+                    <div class="offer-company">{{ offer.entreprise_nom }}</div>
+                    <div class="offer-meta">
+                        <span>{{ offer.localisation }}</span>
+                        <span>{{ offer.created_at|date("d/m/Y") }}</span>
+                    </div>
+                    <div class="offer-footer">
+                        <a class="details-link" href="/annonces/{{ offer.id }}">Voir details</a>
+                        <span class="muted">Publie le {{ offer.created_at|date("d/m/Y") }}</span>
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <div class="muted">Aucune offre disponible.</div>
+        {% endfor %}
+    </div>
 
-  // Real-time search with debouncing
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      performSearch();
-    }, 300); // 300ms delay
-  });
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const companyFilter = document.getElementById('companyFilter');
+        const contractFilter = document.getElementById('contractFilter');
+        const filterBtn = document.getElementById('filterBtn');
+        const offersContainer = document.getElementById('offersContainer');
+        let debounceTimer;
 
-  // Filter button click
-  filterBtn.addEventListener('click', performSearch);
+        const buildCard = (offer) => {
+            const image = offer.image ? offer.image : '/assets/placeholder.svg';
+            const contract = offer.type_contrat ? offer.type_contrat : 'Contrat';
+            const localisation = offer.localisation ? offer.localisation : 'Localisation';
+            return `
+                <article class="offer-card">
+                    <div class="offer-media">
+                        <img src="${image}" alt="Offre">
+                        <span class="offer-type">${contract}</span>
+                    </div>
+                    <div class="offer-body">
+                        <h3 class="offer-title">${offer.titre}</h3>
+                        <div class="offer-company">${offer.entreprise_nom}</div>
+                        <div class="offer-meta">
+                            <span>${localisation}</span>
+                            <span>${offer.created_at}</span>
+                        </div>
+                        <div class="offer-footer">
+                            <a class="details-link" href="/annonces/${offer.id}">Voir details</a>
+                            <span class="muted">Publie le ${offer.created_at}</span>
+                        </div>
+                    </div>
+                </article>
+            `;
+        };
 
-  // Enter key on search input
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      performSearch();
-    }
-  });
+        const performSearch = async () => {
+            const params = new URLSearchParams();
+            if (searchInput.value) params.append('search', searchInput.value);
+            if (companyFilter.value) params.append('company_id', companyFilter.value);
+            if (contractFilter.value) params.append('contract_type', contractFilter.value);
 
-  async function performSearch() {
-    const searchQuery = searchInput.value;
-    const company = companyFilter.value;
-    const contract = contractFilter.value;
+            const response = await fetch(`/annonces/filter?${params.toString()}`);
+            const offers = await response.json();
 
-    try {
-      const params = new URLSearchParams();
-      if (searchQuery) params.append('search', searchQuery);
-      if (company) params.append('company_id', company);
-      if (contract) params.append('contract_type', contract);
+            offersContainer.innerHTML = '';
+            if (!offers.length) {
+                offersContainer.innerHTML = '<div class="muted">Aucune offre ne correspond a vos criteres.</div>';
+                return;
+            }
 
-      const response = await fetch(`/annonces/filter?${params.toString()}`);
-      const offers = await response.json();
+            offers.forEach((offer) => {
+                offersContainer.insertAdjacentHTML('beforeend', buildCard(offer));
+            });
+        };
 
-      // Clear and rebuild the grid
-      offersContainer.innerHTML = '';
-
-      if (offers.length === 0) {
-        offersContainer.innerHTML = `
-          <div class="col-span-2 text-center py-12 text-gray-500">
-            <p class="text-lg">📭 Aucune offre ne correspond à vos critères</p>
-          </div>
-        `;
-        return;
-      }
-
-      offers.forEach(offer => {
-        const description = offer.description.length > 100 
-          ? offer.description.substring(0, 100) + '...' 
-          : offer.description;
-
-        const offerHTML = `
-          <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-xl transition">
-            <span class="text-xs bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full">
-              ${offer.type_contrat}
-            </span>
-            <h3 class="text-lg font-bold mt-3">${offer.titre}</h3>
-            <p class="text-sm text-gray-500">${offer.entreprise_nom}</p>
-            <p class="mt-3 text-sm text-gray-600">${description}</p>
-            <a href="/annonces/show/${offer.id}" class="inline-block mt-4 text-indigo-600 font-semibold">
-              Voir détails →
-            </a>
-          </div>
-        `;
-
-        offersContainer.innerHTML += offerHTML;
-      });
-    } catch (error) {
-      console.error('Erreur lors de la recherche:', error);
-    }
-  }
-</script>
-
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(performSearch, 300);
+        });
+        filterBtn.addEventListener('click', performSearch);
+        companyFilter.addEventListener('change', performSearch);
+        contractFilter.addEventListener('change', performSearch);
+    </script>
 {% endblock %}

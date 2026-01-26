@@ -1,0 +1,27 @@
+<div class="auth-card">
+    <div class="brand">
+        <div class="logo-mark" aria-hidden="true">
+            <span>U</span><span>M</span><span>6</span><span>P</span>
+        </div>
+        <h1>YouCode Plus</h1>
+        <p>Administration</p>
+    </div>
+
+    <div class="error">{{ error }}</div>
+
+    <form method="post" action="/admin/login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="admin@youcode.ma" required>
+        </div>
+
+        <div class="field">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" name="password" placeholder="********" required>
+        </div>
+
+        <button class="btn-primary" type="submit">Se connecter</button>
+    </form>
+</div>

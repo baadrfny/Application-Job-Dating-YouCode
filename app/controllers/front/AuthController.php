@@ -12,7 +12,7 @@ use models\Apprenant;
 
 class AuthController extends Controller
 {
-    protected string $csrfScope = 'apprenant';
+    protected string $csrfScope = 'app';
 
     public function showLogin(Request $request): string
     {
@@ -36,7 +36,7 @@ class AuthController extends Controller
         $email = trim((string) $request->input('email', ''));
         $password = (string) $request->input('password', '');
 
-        [$canAttempt, $lockMessage] = Auth::canAttempt('apprenant', $email);
+        [$canAttempt, $lockMessage] = Auth::canAttempt('app', $email);
         if (!$canAttempt) {
             return $this->view('front.auth.login', [
                 'title' => 'Login',
@@ -53,15 +53,21 @@ class AuthController extends Controller
             ]);
         }
 
-        if (!Auth::attempt($email, $password, 'apprenant')) {
+        $role = Auth::attemptAny($email, $password);
+        if ($role === null) {
             return $this->view('front.auth.login', [
                 'title' => 'Login',
-                'error' => Auth::recordFailedAttempt('apprenant', $email),
+                'error' => Auth::recordFailedAttempt('app', $email),
                 'error_display' => 'block'
             ]);
         }
 
-        Auth::clearAttempts('apprenant', $email);
+        Auth::clearAttempts('app', $email);
+        if ($role === 'admin') {
+            Response::redirect('/admin/dashboard');
+            return '';
+        }
+
         Response::redirect('/annonces');
         return ''; 
     }

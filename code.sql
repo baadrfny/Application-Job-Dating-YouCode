@@ -36,6 +36,7 @@ CREATE TABLE entreprises (
     nom VARCHAR(150) NOT NULL,
     secteur VARCHAR(100),
     localisation VARCHAR(150),
+    image VARCHAR(255),
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(30)
 );
@@ -54,4 +55,19 @@ CREATE TABLE annonces (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (entreprise_id) REFERENCES entreprises(id) ON DELETE CASCADE
+);
+
+-- Applications table: apprenant job applications
+CREATE TABLE applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    announcement_id INT NOT NULL,
+    motivation TEXT NOT NULL,
+    cv_path VARCHAR(255) DEFAULT NULL,
+    status ENUM('pending','accepted','rejected') DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (announcement_id) REFERENCES annonces(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_application (student_id, announcement_id)
 );

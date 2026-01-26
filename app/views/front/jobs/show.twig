@@ -1,0 +1,41 @@
+{% extends "layouts/front.twig" %}
+
+{% block content %}
+    <div class="hero">
+        <h1>{{ offer.titre }}</h1>
+        <p>{{ company.nom }} - {{ offer.localisation }}</p>
+    </div>
+
+    <div class="offer-card" style="max-width: 720px;">
+        <img src="{{ offer.image|default('/assets/placeholder.svg') }}" alt="Offre">
+        <div class="offer-body">
+            <span class="pill">{{ offer.type_contrat }}</span>
+            <h3>Description</h3>
+            <p class="muted">{{ offer.description|default('Description non disponible.') }}</p>
+            {% if offer.competences %}
+                <h3>Competences</h3>
+                <p class="muted">{{ offer.competences }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="panel" style="margin-top: 22px; max-width: 720px;">
+        <h3>Postuler a cette offre</h3>
+        {% if already_applied %}
+            <p class="muted">Vous avez deja postule a cette offre.</p>
+        {% else %}
+            <form method="post" action="/annonces/{{ offer.id }}/postuler" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="field">
+                    <label for="motivation">Message de motivation</label>
+                    <textarea id="motivation" name="motivation" rows="5" class="field-input" required></textarea>
+                </div>
+                <div class="field">
+                    <label for="cv">CV (PDF uniquement)</label>
+                    <input id="cv" type="file" name="cv" accept="application/pdf" class="field-input">
+                </div>
+                <button class="btn primary" type="submit">Postuler</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

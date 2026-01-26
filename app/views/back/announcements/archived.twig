@@ -1,0 +1,36 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Archives</div>
+    <div class="page-subtitle">{{ annonces|length }} annonce(s) archivee(s)</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher dans les archives...">
+    </div>
+
+    <div class="card-grid">
+        {% for annonce in annonces %}
+            <div class="archive-card" data-search="{{ annonce.titre }} {{ annonce.entreprise_nom }} {{ annonce.type_contrat }} {{ annonce.localisation }}">
+                <img class="announcement-img" src="{{ annonce.image|default('/assets/placeholder.svg') }}" alt="Archive">
+                <div style="margin-top: 12px;">
+                    <span class="pill">Archivee</span>
+                    <h3 style="margin: 10px 0 6px;">{{ annonce.titre }}</h3>
+                    <div class="muted">{{ annonce.entreprise_nom }}</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="pill">{{ annonce.type_contrat }}</span>
+                    <span class="pill">{{ annonce.localisation }}</span>
+                </div>
+                <div class="muted" style="margin-top: 12px;">Creee le {{ annonce.created_at|date("d/m/Y") }}</div>
+                <div style="margin-top: 12px;">
+                    <form method="post" action="/admin/annonces/{{ annonce.id }}/restore">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn success" type="submit">Restaurer</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="muted">Aucune annonce archivee.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

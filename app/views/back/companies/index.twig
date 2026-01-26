@@ -1,0 +1,43 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Gestion des entreprises</div>
+    <div class="page-subtitle">{{ entreprises|length }} entreprise(s) partenaire(s)</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher une entreprise...">
+        <a class="btn success" href="/admin/entreprises/create">Nouvelle entreprise</a>
+    </div>
+
+    <div class="card-grid">
+        {% for entreprise in entreprises %}
+            <div class="company-card" data-search="{{ entreprise.nom }} {{ entreprise.secteur }} {{ entreprise.localisation }} {{ entreprise.email }} {{ entreprise.telephone }}">
+                <div class="company-header">
+                    {% if entreprise.image %}
+                        <img class="company-avatar" src="{{ entreprise.image }}" alt="{{ entreprise.nom }}">
+                    {% else %}
+                        <div class="company-avatar">{{ entreprise.nom|slice(0,2)|upper }}</div>
+                    {% endif %}
+                    <div>
+                        <strong>{{ entreprise.nom }}</strong>
+                        <div class="muted">{{ entreprise.secteur }}</div>
+                    </div>
+                </div>
+                <div style="margin-top: 12px; display: grid; gap: 6px;" class="muted">
+                    <div>Localisation: {{ entreprise.localisation|default('N/A') }}</div>
+                    <div>Email: {{ entreprise.email }}</div>
+                    <div>Telephone: {{ entreprise.telephone|default('N/A') }}</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 10px;">
+                    <a class="link-primary" href="/admin/entreprises/edit/{{ entreprise.id }}">Modifier</a>
+                    <form method="post" action="/admin/entreprises/{{ entreprise.id }}/delete">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="btn ghost" type="submit">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="muted">Aucune entreprise trouvee.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

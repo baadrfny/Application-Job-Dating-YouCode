@@ -27,6 +27,29 @@ class Auth
         return true;
     }
 
+    public static function attemptAny(string $email, string $password): ?string
+    {
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+
+        if (!$user) return null;
+        if (($user['status'] ?? 'active') !== 'active') return null;
+        if (!password_verify($password, $user['password'])) return null;
+
+        $role = $user['role'] ?? '';
+        if ($role === 'admin') {
+            self::loginUser($user, 'admin');
+            return 'admin';
+        }
+
+        if ($role === 'apprenant') {
+            self::loginUser($user, 'apprenant');
+            return 'apprenant';
+        }
+
+        return null;
+    }
+
     public static function check(): bool
     {
         return self::checkStudent();

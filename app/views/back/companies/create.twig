@@ -1,0 +1,42 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Nouvelle entreprise</div>
+    <div class="page-subtitle">Ajouter une entreprise partenaire</div>
+    <div class="panel">
+        <form method="post" action="/admin/entreprises" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input class="form-input" id="nom" name="nom" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="secteur">Secteur</label>
+                    <input class="form-input" id="secteur" name="secteur" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="localisation">Localisation</label>
+                    <input class="form-input" id="localisation" name="localisation" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-input" id="email" name="email" type="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Telephone</label>
+                    <input class="form-input" id="telephone" name="telephone" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="image">Image / Logo</label>
+                    <input class="form-input" id="image" name="image" type="file" accept="image/*">
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <button class="btn success" type="submit">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

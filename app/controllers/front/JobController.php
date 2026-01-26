@@ -2,8 +2,12 @@
 namespace controllers\front;
 
 use core\Controller;
+use core\Auth;
+use core\Response;
 use models\AnnonceModel;
+use models\Application;
 use models\Company;
+use models\User;
 
 class JobController extends Controller{
     private $announceModel;
@@ -18,41 +22,46 @@ class JobController extends Controller{
     public function index($request) {
         $offers = $this->announceModel->getActiveAnnonces();
         $companies = $this->companyModel->getAll();
+        $studentName = 'Etudiant YouCode';
+        $userId = Auth::id('apprenant');
+        if ($userId) {
+            $user = (new User())->find($userId);
+            if ($user && !empty($user['name'])) {
+                $studentName = $user['name'];
+            }
+        }
         
         return $this->render('front/jobs/index', [
             'offers' => $offers,
-            'companies' => $companies
+            'companies' => $companies,
+            'student_name' => $studentName,
+            'title' => 'Offres'
         ]);
     }
     
     public function show($request, $id) {
         $offer = $this->announceModel->find($id);
-        
-        // if (!$offer || $offer['deleted_at'] == 1) {
-        //     http_response_code(404);
-        //     return "<h1>Error 404</h1><p>Offer not found</p>";
-        // }
-        
+
+        if (!$offer || (int) ($offer['deleted_at'] ?? 0) === 1) {
+            Response::redirect('/annonces');
+            return '';
+        }
+
         $company = $this->companyModel->findById($offer['entreprise_id']);
-        
-        return $this->renderTemplate('front/jobs/show', [
+        $studentId = Auth::id('apprenant');
+        $alreadyApplied = false;
+        if ($studentId) {
+            $alreadyApplied = (bool) (new Application())
+                ->findByStudentAndAnnouncement($studentId, (int) $id);
+        }
+
+        return $this->render('front/jobs/show', [
             'offer' => $offer,
-            'company' => $company
+            'company' => $company,
+            'title' => $offer['titre'] ?? 'Offre',
+            'already_applied' => $alreadyApplied
         ]);
     }
-    
-    private function renderTemplate($template, $data = []) {
-        extract($data);
-        ob_start();
-        include __DIR__ . '/../../../app/views/' . $template . '.twig';
-        return ob_get_clean();
-    }
-    
-    private function renderError($code, $message) {
-        http_response_code($code);
-        return "<h1>Error $code</h1><p>$message</p>";
-    }
-
 
     public function filter($request) {
         $search = $request->input('search');

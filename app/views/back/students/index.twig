@@ -1,0 +1,37 @@
+{% extends "layouts/admin.twig" %}
+
+{% block content %}
+    <div class="page-title">Gestion des apprenants</div>
+    <div class="page-subtitle">{{ apprenants|length }} apprenant(s) inscrit(s)</div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Rechercher un apprenant...">
+    </div>
+
+    <div class="table-card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Promotion</th>
+                    <th>Specialisation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for apprenant in apprenants %}
+                    <tr data-search="{{ apprenant.name }} {{ apprenant.email }} {{ apprenant.promotion|default('') }} {{ apprenant.specialisation|default('') }}">
+                        <td>{{ apprenant.name }}</td>
+                        <td>{{ apprenant.email }}</td>
+                        <td><span class="badge">{{ apprenant.promotion|default('N/A') }}</span></td>
+                        <td>{{ apprenant.specialisation|default('N/A') }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="muted">Aucun apprenant trouve.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
